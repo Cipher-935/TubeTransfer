@@ -1,0 +1,22 @@
+{
+  "name": "video_gallery",
+  "version": "1.0.0",
+  "description": "This is project for uploading files to the s3 bucket and than using streams to view it in real time",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jay D Mistry",
+  "license": "ISC",
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.556.0",
+    "aws-sdk": "^2.1603.0",
+    "body-parser": "^1.20.2",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "fs": "^0.0.1-security",
+    "http": "^0.0.1-security",
+    "multer": "^1.4.5-lts.1",
+    "path": "^0.12.7"
+  }
+}

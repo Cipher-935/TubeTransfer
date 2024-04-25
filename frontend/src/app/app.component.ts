@@ -6,15 +6,16 @@ import { HeroComponent } from './components/hero/hero.component';
 import { FileUploadComponent } from './components/file-upload/file-upload.component';
 import { CommunicationService } from './services/communication.service';
 
-@Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [RouterOutlet, HttpClientModule, HeaderComponent, HeroComponent, FileUploadComponent],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+@Component(
+{
+    selector: 'app-root',
+    standalone: true,
+    imports: [RouterOutlet, HttpClientModule, HeaderComponent, HeroComponent, FileUploadComponent],
+    templateUrl: './app.component.html',
+    styleUrl: './app.component.css'
 })
-export class AppComponent {
-    title = 'frontend';
+export class AppComponent 
+{
     readonly apiUrl="http://localhost:4000/test/";
     responseMessage: string = '';
 
@@ -44,8 +45,9 @@ export class AppComponent {
     scrollToUploadComponent() 
     {
         const uploadComponent = document.querySelector('app-file-upload');
-        if (uploadComponent) {
-          uploadComponent.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (uploadComponent) 
+        {
+            uploadComponent.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
-      }
+    }
 }

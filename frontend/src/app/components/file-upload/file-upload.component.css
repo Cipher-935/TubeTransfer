@@ -1,4 +1,4 @@
-.upload-container
+.upload-container 
 {
     margin: auto;
     width: 100%;
@@ -11,10 +11,10 @@
     background-color: inherit;
     position: relative;
     z-index: 2;
-  }
-  
-  .upload-box 
-  {
+}
+
+.upload-box 
+{
     display: flex;
     justify-content: center;
     align-items: center;
@@ -24,51 +24,50 @@
     border: 2px dashed #ccc;
     border-radius: 5px;
     color: #ccc;
-  }
-  
-  .upload-box:hover 
-  {
+}
+
+.upload-box:hover 
+{
     border-color: #aaa;
     border-style: double;
-  }
-  
-  .upload-box.dragover 
-  {
+}
+
+.upload-box.dragover 
+{
     border-color: #392467;
-  }
-  
-  h2 
-  {
+}
+
+h2 
+{
     margin: 0;
-  }
-  
-  .upload-container h2 
-  {
+}
+
+.upload-container h2 
+{
     font-size: 50px;
     margin-bottom: 20px;
-  }
-  
-  .upload-box.dragover h2 
-  {
-    color: #392467;
-  }
+}
 
-  .upload-container .drag-message
-  {
+.upload-box.dragover h2 
+{
+    color: #392467;
+}
+
+.upload-container .drag-message 
+{
     align-items: center;
     font-size: 50px;
-  }
+}
 
-  .upload-details
-  {
+.upload-details 
+{
     margin-top: 20px;
-  }
+}
 
-  .upload-details form
-  {
+.upload-details form 
+{
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-  }
-  
+}

@@ -17,19 +17,22 @@
   {
     display: flex;
     justify-content: center;
+    align-items: center;
     top: 50%;
     width: 80%;
     height: 50%;
     border: 2px dashed #ccc;
     border-radius: 5px;
+    color: #ccc;
   }
   
-  .upload-container:hover 
+  .upload-box:hover 
   {
     border-color: #aaa;
+    border-style: double;
   }
   
-  .upload-container.dragover 
+  .upload-box.dragover 
   {
     border-color: #392467;
   }
@@ -45,7 +48,7 @@
     margin-bottom: 20px;
   }
   
-  .upload-container.dragover h2 
+  .upload-box.dragover h2 
   {
     color: #392467;
   }
@@ -53,6 +56,6 @@
   .upload-container .drag-message
   {
     align-items: center;
-    font-size: 100px;
+    font-size: 50px;
   }
   

@@ -36,7 +36,7 @@
     transition: transform 0.3s ease;
 
     opacity: 0;
-    animation: slideUp 1.5s ease-in-out forwards 1s;
+    animation: fadeIn 1.5s ease-in-out forwards 1s;
 }
 
 .hero-text img:hover
@@ -60,6 +60,18 @@
     to
     {
         transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn
+{
+    from
+    {
+        opacity: 0;
+    }
+    to
+    {
         opacity: 1;
     }
 }

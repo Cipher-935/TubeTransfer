@@ -32,36 +32,17 @@ router.route("/upload").post(upload.single("file_data"), async (req,res) => {
     });
 });
 
-router.route("/delete").post(async (req,res) => {
-    
-    const {main_key} = req.body;
-    const s3 = new S3Client({
-        credentials:{
-             accessKeyId: 'AKIAVKFZNFSAFNE5KZ57',
-             secretAccessKey: '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'
-         },
-         region: "ca-central-1"
-     });
-     const param = {
-         Bucket: "wrefesfverfgefrg",
-         Key: main_key
-     };
-     
-     const command = new DeleteObjectCommand(param);
-     try{
-        const del_response = await s3.send(command);
-        res.status(200).json({
-            resp: "Deleted"
-        })
-     }
-     catch(e){
-        res.status(404).json({
-            resp: "Could not delete"
-        });
-     }
-});
+router.route("/delete").post(controller.delete_object);
 
-router.route("/stream").post(controller.stream_c_upload);
+router.route("/pipeline").post(controller.stream_c_upload);
+
+router.route("/get-presign-link").post(controller.get_object);
+
+router.route("/get-list").get(controller.list_objects);
+
+router.route("/get-put-url").post(controller.put_object_url);
+
+
 
 
 module.exports = router;

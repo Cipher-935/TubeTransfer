@@ -1,0 +1,26 @@
+.header-container
+{
+    display: flex;
+    align-items: center;
+    height: 100px;
+    background-color: #392467;
+}
+
+.logo-container
+{
+    padding-left: 10%;
+}
+
+.logo-container a
+{
+    color: #EEF0E5;
+    font-weight: 200;
+    font-size: 20px;
+}
+
+.header-container p
+{
+    color: #EEF0E5;
+    font-weight: 100;
+    font-size: 15px;
+}

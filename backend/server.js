@@ -19,11 +19,11 @@ app.use('/templates', express.static(path.join(__dirname, 'templates'))); // For
 
 app.use("/", route_handler);
 
-app.get("*", (req,res) => {
-    res.status(200).json({
-        resp: 'Not supported'
-    });
-});
+// app.get("*", (req,res) => {
+//     res.status(200).json({
+//         resp: 'Not supported'
+//     });
+// });
 server.listen(4000, () =>  {
    console.log("App has stared");
 });

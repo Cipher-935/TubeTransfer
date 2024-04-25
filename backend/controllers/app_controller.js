@@ -6,7 +6,11 @@ const zlib = require('node:zlib');
 const { S3Client, PutObjectCommand, DeleteObjectCommand, GetObjectCommand, ListObjectsV2Command } = require("@aws-sdk/client-s3");
 const signer = require("@aws-sdk/s3-request-presigner");
 
-
+// For testing (remove later)
+exports.get_test = (req, res) => {
+    res.status(200).json({message: "This message is from the backend!!!"});
+};
+// End of test
 
 exports.get_home = async (req, res) => {
     try{

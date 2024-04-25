@@ -1,0 +1,77 @@
+.hero-container
+{
+    display: flex;
+    align-items: center;
+    background-color: #f9f9f9;
+    background-image: url('../../../assets/images/background/dots.png');
+    height: 850px;
+}
+
+.hero-text
+{
+    width: 700px;
+    padding-left: 80px;
+    color: black;
+    position: absolute;
+    z-index: 1;
+}
+
+.hero-text h1
+{
+    font-size: 70px;
+    animation: slideUp 1.5s ease-in-out forwards;
+}
+
+.hero-text button
+{
+
+    border: none;
+    background-color: transparent;
+    margin-top: 20px;
+}
+
+.hero-text img
+{
+    width: 80px;
+    transition: transform 0.3s ease;
+
+    opacity: 0;
+    animation: slideUp 1.5s ease-in-out forwards 1s;
+}
+
+.hero-text img:hover
+{
+    transform: scale(1.3);
+    cursor: pointer;
+}
+
+.hero-text .arrow-button
+{
+    animation: float 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes slideUp
+{
+    from
+    {
+        transform: translateY(50%);
+        opacity: 0;
+    }
+    to
+    {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes float
+{
+    from
+    {
+        transform: translateY(0);
+    }
+    to
+    {
+        transform: translateY(-10px);
+    }
+}

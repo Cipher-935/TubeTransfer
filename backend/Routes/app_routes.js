@@ -7,6 +7,10 @@ const multer = require("multer");
 const store = multer.memoryStorage();
 const upload = multer({storage: store});
 
+// For testing (remove later)
+router.route("/test").get(controller.get_test);
+// End test
+
 // All app routes and their respective functions are defined here
 
 router.route("/home").get(controller.get_home);

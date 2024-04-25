@@ -58,4 +58,17 @@
     align-items: center;
     font-size: 50px;
   }
+
+  .upload-details
+  {
+    margin-top: 20px;
+  }
+
+  .upload-details form
+  {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
   

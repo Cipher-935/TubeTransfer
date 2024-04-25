@@ -152,3 +152,7 @@ exports.stream_c_upload = async(req,res) => {
         res.status(200).json({ resp: 'Successfully uploaded and compressed the file' });
     });
 }
+
+exports.test_func = async (req, res) => {
+    
+}

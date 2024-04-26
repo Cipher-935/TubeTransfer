@@ -16,6 +16,7 @@ import { CommunicationService } from './services/communication.service';
 })
 export class AppComponent 
 {
+    title:string = 'frontend';
     readonly apiUrl="http://localhost:4000/get-list";
     responseMessage: string = '';
 

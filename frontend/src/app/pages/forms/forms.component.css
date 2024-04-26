@@ -1,0 +1,55 @@
+.upload-details 
+{
+    border-radius: 4px;
+    padding: 20px;
+    margin-top: 20px;
+    max-width: 1000px;
+    margin: auto;
+}
+
+/* Form row styling */
+.form-row 
+{
+    display: flex;
+    margin-bottom: 10px;
+    align-items: center;
+}
+
+/* Label styles */
+.form-row label 
+{
+    flex: 2;
+    font-size: 14px;
+    color: #333;
+    margin-right: 10px;
+}
+
+/* Input styles */
+.form-row input[type="text"] 
+{
+    flex: 3;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+/* Button styles */
+.upload-details button 
+{
+    background-color: #392467;
+    color: #fff;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+
+/* Style variation for "Upload to S3" and "Stream to server" buttons */
+.upload-details button:not(.form-row button) 
+{
+    background-color: #392467;
+    font-size: 16px;
+}

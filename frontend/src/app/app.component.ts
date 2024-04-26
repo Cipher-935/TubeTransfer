@@ -16,7 +16,7 @@ import { CommunicationService } from './services/communication.service';
 })
 export class AppComponent 
 {
-    readonly apiUrl="http://localhost:4000/test/";
+    readonly apiUrl="http://localhost:4000/get-list";
     responseMessage: string = '';
 
     constructor(private httpClient:HttpClient, private communicationService: CommunicationService){}
@@ -25,7 +25,7 @@ export class AppComponent
     {
         this.httpClient.get<any>(this.apiUrl).subscribe(response => 
         {
-            console.log("Connect: " + response.message);
+            console.log("Connect: " + response.resp);
         });
 
         this.communicationService.scrollUploadComponent$.subscribe(() => 

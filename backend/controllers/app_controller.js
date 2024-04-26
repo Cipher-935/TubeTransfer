@@ -1,16 +1,17 @@
-
 const fs = require("fs");
 const path = require("path");
-const stream = require("node:stream");
-const zlib = require('node:zlib');
 const { S3Client, PutObjectCommand, DeleteObjectCommand, GetObjectCommand, ListObjectsV2Command } = require("@aws-sdk/client-s3");
-const signer = require("@aws-sdk/s3-request-presigner");
+const {getSignedUrl} = require("@aws-sdk/s3-request-presigner");
+const file_model =  require("../models/file_information_model.js");
+const mongoose = require("mongoose");
 
-// For testing (remove later)
-exports.get_test = (req, res) => {
-    res.status(200).json({message: "This message is from the backend!!!"});
-};
-// End of test
+const s3 = new S3Client({
+    credentials:{
+        accessKeyId: process.env.ACCESS_KEY,
+        secretAccessKey: process.env.SECRET_ACCESS_KEY
+    },
+    region: process.env.bucket_location
+});
 
 exports.get_home = async (req, res) => {
     try{
@@ -37,19 +38,13 @@ exports.get_home = async (req, res) => {
 exports.get_object = async (req,res) => {
     try{
         const {get_key} = req.body;
-        const s3 = new S3Client({
-            region: "ca-central-1",
-            credentials:{
-                accessKeyId:'AKIAVKFZNFSAFNE5KZ57' ,
-                secretAccessKey: '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'
-            }
-        });
         const param = {
-            Bucket: 'wrefesfverfgefrg',
+            Bucket: process.env.bucket_name,
             Key: get_key
         };
         const command = new GetObjectCommand(param);
-        const url = await signer.getSignedUrl(s3, command, {expiresIn: 60000});
+    
+        const url = await getSignedUrl(s3, command, {expiresIn: 60*2, signingDate: new Date()});
         console.log(url);
         res.status(200).json({
             resp: url
@@ -66,15 +61,8 @@ exports.get_object = async (req,res) => {
 // This function is used to delete the object form the s3
 exports.delete_object = async (req,res) => {
     const {main_key} = req.body;
-    const s3 = new S3Client({
-        credentials:{
-             accessKeyId: 'AKIAVKFZNFSAFNE5KZ57',
-             secretAccessKey: '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'
-         },
-         region: "ca-central-1"
-     });
      const param = {
-         Bucket: "wrefesfverfgefrg",
+         Bucket: process.env.bucket_name,
          Key: main_key
      };
      
@@ -93,15 +81,8 @@ exports.delete_object = async (req,res) => {
 }
 
 exports.list_objects = async (req,res) => {
-    const s3 = new S3Client({
-        credentials:{
-            accessKeyId: 'AKIAVKFZNFSAFNE5KZ57',
-            secretAccessKey: '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'
-        },
-        region: "ca-central-1"
-    });
     const list_command = new ListObjectsV2Command({
-        Bucket: "wrefesfverfgefrg"
+        Bucket: process.env.bucket_name
     });
     const result = await s3.send(list_command);
     res.status(200).json({
@@ -111,52 +92,43 @@ exports.list_objects = async (req,res) => {
 }
 
 exports.put_object_url = async (req,res) => {
-    const {file_name, file_type} = req.body;
-    const s3 = new S3Client({
-        credentials:{
-            accessKeyId: 'AKIAVKFZNFSAFNE5KZ57',
-            secretAccessKey: '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'
-        },
-        region: "ca-central-1"
-    });
-    const put_command = new PutObjectCommand({
-        Bucket: "wrefesfverfgefrg",
-        Key: file_name,
-        ContentType: file_type
-    });
-    const put_url = await signer.getSignedUrl(s3, put_command, {expiresIn: 6000});
-    res.status(200).json({
-        resp: put_url
-    });
-}
- 
+    try{
+        const {file_name, file_type, file_description, file_mime} = req.body;
+        const file_extension = file_name.split(".").pop();
+        let loc = '';
+        if(file_extension === "txt"){
+            loc += "documents/" + file_name;
+        }
+        else if(file_extension === 'mp4'){
+            loc += "videos/" + file_name;
+        }
+        else{
+            loc += file_name;
+        }
+        const file_add = await file_model.create({uploded_file_name: file_name, uploaded_file_extension: file_extension, uploaded_file_description: file_description, uploaded_file_type: file_type, uploaded_file_storage_location: loc});
+        if(file_add){
+            const put_command = new PutObjectCommand({
+                Bucket: process.env.bucket_name,
+                Key: loc,
+                ContentType: file_mime
+            });
+            const put_url = await getSignedUrl(s3, put_command, {expiresIn: 6000});
+            res.status(200).json({
+                resp: put_url
+            });
+        }
+        else{
+            res.status(404).json({
+                resp: "Could not save the data to db"
+           });  
+        }
+    }
+    catch(e){
+       res.status(404).json({
+            resp: "Error saving the data: " + e
+       });  
+    }
 
-// Compressing pipeline for storing the data to the uploads using pipe streams
-exports.stream_c_upload = async(req,res) => {
-    const read = req;
-    const write_stream = fs.createWriteStream("uploads/file.txt.gz");
-
-    const gzip = zlib.createGzip(); // Create a gzip transform stream
-
-    // Pipe the read stream through the gzip stream and then to the write stream
-    read.pipe(gzip).pipe(write_stream);
-
-    // Handle events
-    read.on("error", (error) => {
-        console.error('Error in the read stream:', error);
-        res.status(500).json({ resp: 'Error in the read stream' });
-    });
-
-    write_stream.on("error", (error) => {
-        console.error('Error in the write stream:', error);
-        res.status(500).json({ resp: 'Error in the write stream' });
-    });
-
-    write_stream.on("finish", () => {
-        res.status(200).json({ resp: 'Successfully uploaded and compressed the file' });
-    });
 }
 
-exports.test_func = async (req, res) => {
-    
-}
+

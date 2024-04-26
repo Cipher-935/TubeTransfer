@@ -1,35 +1,13 @@
 
 document.addEventListener("DOMContentLoaded", () => {
   
-   const btn_upload = document.querySelector(".btn_upload");
    const btn_delete = document.querySelector(".delete_btn");
-   const btn_stream = document.querySelector(".btn_stream");
    const btn_get_link = document.querySelector(".get-url");
    const btn_list = document.querySelector(".list_btn");
    const btn_put = document.querySelector('.btn_put');
+   const vid_tag = document.getElementById("vid_frame");
 
-   btn_upload.addEventListener("click", async (e) => {
-       e.preventDefault();
-       const file_input = document.getElementById("f_input");
-       if(file_input.files.length > 0){
-           const formData = new FormData();
-           formData.append("file_data", file_input.files[0]);
-           const sent_file = await fetch("http://127.0.0.1:4000/upload", {
-            method: "POST",
-            // headers: {"Content-Type": "application/x-www-form-urlencoded"},
-            body: formData
-           });
-           if(sent_file.status === 200){
-            const rec = await sent_file.json();
-               alert(rec.resp);
-           }
-         
-       }
-       else{
-           alert("THe file input is required");
-       }
-   });
-   
+
    btn_delete.addEventListener("click", async (e) => {
     e.preventDefault();
     const input_key = document.getElementById("del-id").value;
@@ -49,32 +27,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
    }); 
 
-
-   btn_stream.addEventListener("click", async (e) => {
-       e.preventDefault();
-       const file_input = document.getElementById("f_input");
-       if(file_input.files.length > 0){
-           const formData = new FormData();
-           formData.append("file_data", file_input.files[0]);
-           const sent_file = await fetch("http://127.0.0.1:4000/pipeline", {
-            method: "POST",
-            body: formData
-           });
-           if(sent_file.status === 200){
-            const rec = await sent_file.json();
-               alert(rec.resp);
-           }
-           else{
-               alert("Not working");
-           }
-           
-       }
-       else{
-           alert("THe file input is required");
-       }
-   });
-
-
    btn_get_link.addEventListener("click", async (e) => {
     e.preventDefault();
     const link_key = document.getElementById("file_name").value;
@@ -86,10 +38,10 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     if(rec_link.status === 200){
         const final_link = await rec_link.json();
+        vid_tag.setAttribute("src", final_link.resp);
     }
     else if(rec_link.status === 404){
         alert(final_link.resp);
-        
     }
    });
 
@@ -107,8 +59,9 @@ document.addEventListener("DOMContentLoaded", () => {
    btn_put.addEventListener("click", async (e) => {
       e.preventDefault();
       const d_file = document.getElementById("d_file");
-      if(d_file.files.length > 0){
-         const mfile = {file_name: d_file.files[0].name, file_type: d_file.files[0].type};
+      const file_desc = document.querySelector(".file_description");
+      if(d_file.files.length > 0 && file_desc.value != ""){
+         const mfile = {file_name: d_file.files[0].name, file_mime: d_file.files[0].type, file_description: file_desc.value, file_type: "nomral"};
          const rec_put_link = await fetch("http://127.0.0.1:4000/get-put-url",{
             method: "POST",
             headers: {"Content-Type": "application/json"},
@@ -116,12 +69,15 @@ document.addEventListener("DOMContentLoaded", () => {
          });
          if(rec_put_link.status === 200){
             const final_url = await rec_put_link.json();
-            const body_dat = new FormData();
-            body_dat.append("file", d_file.files[0]);
+        
             const put_req = await fetch(final_url.resp, {
                 method: "PUT",
-                body: body_dat
+                headers: {
+                    "Content-Type": d_file.files[0].type
+                },
+                body: d_file.files[0]
             });
+            
             if(put_req.status === 200){
                 alert("Hey the file was uploaded");
             }
@@ -130,11 +86,12 @@ document.addEventListener("DOMContentLoaded", () => {
             }
          }
          else{
-            alert("Couldn't fetch the signed url");
+            const final_resp = await rec_put_link.json();
+            alert(final_resp.resp);
          }
       }
       else{
-        alert("File is required");
+        alert("File and the description is required");
       }
    });
 

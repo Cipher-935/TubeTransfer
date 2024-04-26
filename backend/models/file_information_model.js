@@ -5,13 +5,7 @@ const file_schema = mongoose.Schema({
         type: String,
         required: true
     },
-
-    uploaded_file_extension: {
-        type: String,
-        required: true
-
-    },
-
+    
     uploaded_file_description:{
         type: String,
         required: true

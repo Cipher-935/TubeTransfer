@@ -69,7 +69,6 @@ document.addEventListener("DOMContentLoaded", () => {
          });
          if(rec_put_link.status === 200){
             const final_url = await rec_put_link.json();
-        
             const put_req = await fetch(final_url.resp, {
                 method: "PUT",
                 headers: {
@@ -86,8 +85,8 @@ document.addEventListener("DOMContentLoaded", () => {
             }
          }
          else{
-            const final_resp = await rec_put_link.json();
-            alert(final_resp.resp);
+            const j_resp = await rec_put_link.json();
+            alert(j_resp.resp);
          }
       }
       else{

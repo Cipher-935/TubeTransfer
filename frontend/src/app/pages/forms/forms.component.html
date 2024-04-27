@@ -2,8 +2,8 @@
     <form>
         <div class="form-row">
             <label>Enter the file name to delete from the cloud</label>
-            <input type="text">
-            <button>Delete</button>
+            <input type="text" #fileKey>
+            <button (click)="deleteFile(fileKey.value)">Delete</button>
         </div>
 
         <div class="form-row">

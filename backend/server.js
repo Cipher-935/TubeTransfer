@@ -14,10 +14,15 @@ const error_handler = require("./middlewares/error_handler.js");
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json()); // Middleware to exchange data in json format
 app.use(cors());
+
+const user_routes = require('./Routes/user_routes.js');
+
 // Serve static files from the 'templates' directory
 app.use('/templates', express.static(path.join(__dirname, 'templates'))); // For serving files that are static
 
 app.use("/", route_handler);
+
+app.use("/user", user_routes);
 
 app.get("*", (req,res) => {
     res.status(200).json({

@@ -4,7 +4,8 @@ import { CommunicationService } from '../../services/communication.service';
 import { CommonModule } from '@angular/common';
 
 // Optional: Define an interface for the data sent to the backend
-interface DeleteObject {
+interface DeleteObject 
+{
   main_key: string;
 }
 
@@ -15,11 +16,8 @@ interface DeleteObject {
   templateUrl: './forms.component.html',
   styleUrl: './forms.component.css'
 })
-export class FormsComponent {
-  readonly apiUrl = "/delete"; // Assuming your backend API route
-
-  constructor(private httpClient: HttpClient, private communicationService: CommunicationService) { }
-
+export class FormsComponent 
+{
   deleteFile = async (fileName: string) =>
   {
         console.log(fileName);
@@ -47,11 +45,15 @@ export class FormsComponent {
         }
   }
 
-  enableDeleteButton(value: string) {
+  enableDeleteButton(value: string) 
+  {
     const deleteButton = document.querySelector('#deleteButton');
-    if (value) {
+    if (value) 
+    {
       deleteButton?.removeAttribute('disabled');
-    } else {
+    } 
+    else 
+    {
       deleteButton?.setAttribute('disabled', 'true');
     }
   }

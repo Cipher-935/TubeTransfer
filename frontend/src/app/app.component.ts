@@ -17,29 +17,15 @@ import { CommunicationService } from './services/communication.service';
 export class AppComponent 
 {
     title:string = 'frontend';
-    readonly apiUrl="http://localhost:4000/get-list";
     responseMessage: string = '';
 
     constructor(private httpClient:HttpClient, private communicationService: CommunicationService){}
 
     ngOnInit()
     {
-        this.httpClient.get<any>(this.apiUrl).subscribe(response => 
-        {
-            console.log("Connect: " + response.resp);
-        });
-
         this.communicationService.scrollUploadComponent$.subscribe(() => 
         {
             this.scrollToUploadComponent();
-        });
-    }
-
-    getTestMessage()
-    {
-        this.httpClient.get<any>(this.apiUrl).subscribe(response =>
-        {
-            this.responseMessage = response.message;
         });
     }
 

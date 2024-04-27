@@ -2,6 +2,7 @@
 {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     height: 100px;
     background-color: #392467;
 }
@@ -24,4 +25,22 @@
     color: #EEF0E5;
     font-weight: 100;
     font-size: 15px;
+}
+
+.login-button
+{
+    margin-right: 10%;
+}
+
+.login-button a:hover
+{
+    background-color: #eef0e520;
+}
+
+.login-button a
+{
+    border: 1px solid #EEF0E5;
+    padding: 10px 20px;
+    text-decoration: none;
+    color: #EEF0E5;
 }

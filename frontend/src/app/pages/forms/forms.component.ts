@@ -57,8 +57,9 @@ export class FormsComponent
          }
     }
 
-    deleteFile = async (fileName: string) =>
+    deleteFile = async (event: any, fileName: string) =>
     {
+        event.preventDefault();
         console.log(fileName);
 
         // Construct the DeleteObject instance
@@ -97,8 +98,10 @@ export class FormsComponent
         }
     }
 
-    getLink = async (fileName: string) =>
+    getLink = async (event:any, fileName: string) =>
     {
+        event.preventDefault();
+
         const s_dat = {get_key: fileName};
         const rec_link = await fetch("http://127.0.0.1:4000/get-presign-link", 
         {
@@ -109,11 +112,11 @@ export class FormsComponent
         if(rec_link.status === 200)
         {
             const final_link = await rec_link.json();
-            //vid_tag.setAttribute("src", final_link.resp);
+            console.log(final_link);
         }
         else if(rec_link.status === 404)
         {
-            //alert(final_link.resp);
+            console.log("Error");
         }
     }
 

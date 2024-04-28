@@ -27,7 +27,7 @@ const user_sign_in = async (req, res) => {
 
     res.json({ success: true });
   } 
-  catch (errors) {
+  catch (error) {
     console.error("Signup Error: ", error);
     res.status(500).json({ success: false, errors: "Server Error" });
   }
@@ -60,13 +60,40 @@ const user_login = async (req, res) => {
       res.status(401).json({ success: false, errors: "Server Error" });
     }
   } 
-  catch (errors) {
+  catch (error) {
     console.error("Login Error: ", error);
     res.status(500).json({ success: false, errors: "Server Error" });
   }
 };
 
+const get_user_data = (req, res) =>
+{
+    try
+    {
+        // Extracting the token from the authorization header
+        const token = req.headers.authorization?.split(" ")[1];
+
+        if (!token)
+        {
+            return res.status(401).json({success: false, message: 'No token provided'});
+        }
+
+        const decoded = jwt.verify(token, 'secret_ecom');
+        res.status(200).json(
+        {
+            success: true,
+            name: decoded.user.name,
+            email: decoded.user.email
+        });
+    }
+    catch (error)
+    {
+        res.status(401).json({ success: false, message: 'Invalid or expired token' });
+    }
+}
+
 module.exports = {
   user_sign_in,
   user_login,
+  get_user_data
 };

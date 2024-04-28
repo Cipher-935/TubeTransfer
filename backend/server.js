@@ -24,12 +24,24 @@ const route_handler = require("./Routes/app_routes.js");
 const error_handler = require("./middlewares/Error/error_handler.js");
 app.use(bodyParser.urlencoded({ extended: false })); // For handling the url encoded body data often in file uploads
 app.use(express.json()); // Middleware to exchange data in json format
+ 
 app.use(cors()); // For cross origin request handling
 app.use('/templates', express.static(path.join(__dirname, 'templates')));// Serve static files from the 'templates' directory
 
+app.use(cors());
+
+const user_routes = require('./Routes/user_routes.js');
+
+// Serve static files from the 'templates' directory
+app.use('/templates', express.static(path.join(__dirname, 'templates'))); // For serving files that are static
+
 app.use("/", route_handler); // using the route handler to server multiple routes
 
+
 // Unhandled routes go here
+
+app.use("/user", user_routes);
+
 app.get("*", (req,res) => {
     res.status(200).json({
         resp: 'Not supported'

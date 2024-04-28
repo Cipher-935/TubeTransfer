@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
     e.preventDefault();
     const input_key = document.getElementById("del-id").value;
     const obj = {main_key: input_key};
-    console.log(obj);
+   
     const rec_list = await fetch("http://127.0.0.1:4000/delete", {
         method: "POST",
         headers: {"Content-Type": "application/json"}, 

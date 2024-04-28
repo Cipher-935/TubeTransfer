@@ -40,6 +40,7 @@ app.use("/", route_handler); // using the route handler to server multiple route
 
 // Unhandled routes go here
 
+// User routes
 app.use("/user", user_routes);
 
 app.get("*", (req,res) => {

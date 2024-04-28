@@ -22,6 +22,8 @@ app.use('/templates', express.static(path.join(__dirname, 'templates'))); // For
 
 app.use("/", route_handler);
 
+app.use("/user", user_routes);
+
 app.get("*", (req,res) => {
     res.status(200).json({
         resp: 'Not supported'

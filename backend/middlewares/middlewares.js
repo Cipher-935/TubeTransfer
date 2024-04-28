@@ -1,4 +1,5 @@
-const error_h = require("../middlewares/error_class.js");
+const error_h = require("./Error/error_class.js");
+const file_model =  require("../models/file_information_model.js");
 
 const path_builder = function(file_name){
     const extension = file_name.split(".").pop();
@@ -23,7 +24,7 @@ const path_builder = function(file_name){
 
 exports.save_file_data = async (req,res,next) => {
     const {file_name, file_type, file_description, file_mime} = req.body;
-    let storage_path = path_builder(file_name);
+    const storage_path = path_builder(file_name);
     try{
         const file_add = await file_model.create({uploded_file_name: file_name, uploaded_file_description: file_description, uploaded_file_type: file_type, uploaded_file_storage_location: storage_path});
         res.locals.store_path = storage_path;

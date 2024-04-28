@@ -23,23 +23,39 @@ export class FormsComponent
 
     @Input()src!: string;
 
-    onFileSelected(event: any) 
+    onFileSelected = async (event: any, fileDesc:string) =>
     {
-        const reader = new FileReader();
+        event.preventDefault();
         const file = event.target.files[0];
-      
-        reader.onload = (e: any) => 
-        {
-          // Handle the loaded file content
-          const videoUrl = e.target.result;
-          this.src = videoUrl; 
-        };
 
-        // Read the file as a data URL (for testing)
-        reader.readAsDataURL(file);
-
-        console.log(file);
-      }
+        const mfile = {file_name: file.name, file_mime: file.type, file_description: fileDesc, file_type: "nomral"};
+         const rec_put_link = await fetch("http://127.0.0.1:4000/get-put-url",{
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(mfile)
+         });
+         if(rec_put_link.status === 200){
+            const final_url = await rec_put_link.json();
+            const put_req = await fetch(final_url.resp, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": file.type
+                },
+                body: file
+            });
+            
+            if(put_req.status === 200){
+                alert("Hey the file was uploaded");
+            }
+            else{
+                alert("Something went wrong");
+            }
+         }
+         else{
+            const j_resp = await rec_put_link.json();
+            alert(j_resp.resp);
+         }
+    }
 
     deleteFile = async (fileName: string) =>
     {
@@ -101,7 +117,7 @@ export class FormsComponent
         }
     }
 
-    uploadFile = async (fileName: string) =>
+    uploadFile = async (event: any, fileDesc:string) =>
     {
         
     }

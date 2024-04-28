@@ -14,8 +14,9 @@
 
         <div class="form-row">
             <label>This upload will go directly to S3 with put command</label>
-            <input type="file" (change)="onFileSelected($event)">
-            <button>Put</button>
+            <input type="file" (change)="onFileSelected($event, fileDesc.value)">
+            <textarea rows="10" cols="20" #fileDesc></textarea>
+            <!-- <button (click)="uploadFile($event, fileDesc.value)">Put</button> -->
             <button>List</button>
         </div>
     </form>

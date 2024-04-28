@@ -23,6 +23,7 @@ export class LoginComponent {
         {
             console.log("Login: ", form.value);
 
+            console.log("JSON: ", JSON.stringify(form.value));
             await fetch('http://localhost:4000/user/login',
             {
                 method: 'POST',

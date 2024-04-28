@@ -18,6 +18,8 @@ export class HeaderComponent
     {
         const token = localStorage.getItem('auth-token');
 
+        console.log("token", token);
+
         if (token)
         {
             fetch('http://localhost:4000/user/user_data',

@@ -2,6 +2,8 @@ const Users = require("../models/user_model");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
+const { v4: uuidv4 } = require('uuid');
+
 const user_sign_in = async (req, res) => {
   const { name, email, password } = req.body;
 
@@ -17,10 +19,13 @@ const user_sign_in = async (req, res) => {
     // Hash the password before storing it in the database
     const hashedPassword = await bcrypt.hash(password, 8);
 
+    const unique_string = uuidv4();
+
     const user = new Users({
-      name: name,
-      email: email,
-      password: hashedPassword,
+        user_id: unique_string,
+        name: name,
+        email: email,
+        password: hashedPassword,
     });
 
     await user.save();
@@ -48,14 +53,14 @@ const user_login = async (req, res) => {
     if (isMatch) {
       const data = {
         user: {
-          id: user.id,
+          id: user.user_id,
           name: user.name,
           email: user.email,
         },
       };
 
       const token = jwt.sign(data, "secret_ecom", { expiresIn: "1h" });
-      res.json({ success: true, token, id: user.id });
+      res.json({ success: true, token, id: user.user_id });
     } else {
       res.status(401).json({ success: false, errors: "Server Error" });
     }

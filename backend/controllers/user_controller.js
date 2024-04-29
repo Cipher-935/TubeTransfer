@@ -14,37 +14,16 @@ const user_sign_in = async (req, res) => {
     return next(new error_h(`User with this id exists`, 400));
   }
   else{
-    try{
-      const hashedPassword = await bcrypt.hash(password, 8);
-      const added_user = await Users.create({name: name, email: email, password: hashedPassword, user_id: u_id})
-      res.status(200).json({
-        resp: "Successfully registered"
-      });
+        try{
+            const hashedPassword = await bcrypt.hash(password, 8);
+            const added_user = await Users.create({name: name, email: email, password: hashedPassword, user_id: u_id})
+            res.status(200).json({
+            resp: "Successfully registered"
+            });
+        }catch(e){
+            return next(new error_h(`Error registering the user`, 500));
+        }
     }
-
-    // Hash the password before storing it in the database
-    const hashedPassword = await bcrypt.hash(password, 8);
-
-    const unique_string = uuidv4();
-
-    const user = new Users({
-        user_id: unique_string,
-        name: name,
-        email: email,
-        password: hashedPassword,
-    });
-
-    await user.save();
-
-    res.json({ success: true });
-  } 
-  catch (error) {
-    console.error("Signup Error: ", error);
-    res.status(500).json({ success: false, errors: "Server Error" });
-    catch(e){
-        return next(new error_h(`Error registering the user`, 500));
-    }
-  }
 };
 
 const user_login = async (req, res, next) => {
@@ -81,17 +60,12 @@ const user_login = async (req, res, next) => {
 
       const token = jwt.sign(data, "secret_ecom", { expiresIn: "1h" });
       res.json({ success: true, token, id: user.user_id });
-    } else {
-      res.status(401).json({ success: false, errors: "Server Error" });
-    }
+    } 
     else{
       return next(new error_h("Password was incorrect", 500));
     }
-  } 
-  catch (error) {
-    console.error("Login Error: ", error);
-    res.status(500).json({ success: false, errors: "Server Error" });
   }
+}
 };
 
 const send_recovery_email = async (req, res) => 

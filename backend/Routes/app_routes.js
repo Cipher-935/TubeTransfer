@@ -18,7 +18,4 @@ router.route("/get-put-url").post(mid.save_file_data ,controller.put_object_url)
 
 // router.route("/get").get(controller.get_session);
 
-router.route("/load").get(controller.test_load);
-
-
 module.exports = router;

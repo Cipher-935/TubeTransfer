@@ -20,7 +20,8 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const server = http.createServer(app);
 const bodyParser = require('body-parser');
-const route_handler = require("./Routes/app_routes.js");
+const app_route_handler = require("./Routes/app_routes.js");
+const user_route_handler = require("./Routes/user_routes.js");
 const error_handler = require("./middlewares/Error/error_handler.js");
 app.use(bodyParser.urlencoded({ extended: false })); // For handling the url encoded body data often in file uploads
 app.use(express.json()); // Middleware to exchange data in json format
@@ -35,7 +36,9 @@ const user_routes = require('./Routes/user_routes.js');
 // Serve static files from the 'templates' directory
 app.use('/templates', express.static(path.join(__dirname, 'templates'))); // For serving files that are static
 
-app.use("/", route_handler); // using the route handler to server multiple routes
+
+app.use("/", app_route_handler); // using the route handler to server multiple routes
+app.use("/", user_route_handler);
 
 
 // Unhandled routes go here

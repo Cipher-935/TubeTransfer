@@ -17,25 +17,22 @@ const file_schema = mongoose.Schema({
         required: true
     },
 
-
-    // We will add the user model later
-
-    // uploaded_file_author:{
-    //     type: String,
-    //     required: true
-    // },
-    
-    // Whether the file is compressed or encrypted
-    uploaded_file_type:{
+    uploaded_file_owner: {
         type: String,
+        ref: "Users.user_id",
+        required: true
+        
+    },
+    
+    uploaded_file_size: {
+        type: Number,
         required: true
     },
-
+    
     uploaded_file_storage_location: {
         type: String,
         required: true
     }
-
 });
 
 const file_data_model = mongoose.model("file_details", file_schema);

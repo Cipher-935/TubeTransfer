@@ -43,6 +43,7 @@ app.use("/", user_route_handler);
 
 // Unhandled routes go here
 
+// User routes
 app.use("/user", user_routes);
 
 app.get("*", (req,res) => {

@@ -23,26 +23,43 @@ export class FormsComponent
 
     @Input()src!: string;
 
-    onFileSelected(event: any) 
+    onFileSelected = async (event: any, fileDesc:string) =>
     {
-        const reader = new FileReader();
+        event.preventDefault();
         const file = event.target.files[0];
-      
-        reader.onload = (e: any) => 
-        {
-          // Handle the loaded file content
-          const videoUrl = e.target.result;
-          this.src = videoUrl; 
-        };
 
-        // Read the file as a data URL (for testing)
-        reader.readAsDataURL(file);
+        const mfile = {file_name: file.name, file_mime: file.type, file_description: fileDesc, file_type: "nomral"};
+         const rec_put_link = await fetch("http://127.0.0.1:4000/get-put-url",{
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(mfile)
+         });
+         if(rec_put_link.status === 200){
+            const final_url = await rec_put_link.json();
+            const put_req = await fetch(final_url.resp, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": file.type
+                },
+                body: file
+            });
+            
+            if(put_req.status === 200){
+                alert("Hey the file was uploaded");
+            }
+            else{
+                alert("Something went wrong");
+            }
+         }
+         else{
+            const j_resp = await rec_put_link.json();
+            alert(j_resp.resp);
+         }
+    }
 
-        console.log(file);
-      }
-
-    deleteFile = async (fileName: string) =>
+    deleteFile = async (event: any, fileName: string) =>
     {
+        event.preventDefault();
         console.log(fileName);
 
         // Construct the DeleteObject instance
@@ -81,8 +98,10 @@ export class FormsComponent
         }
     }
 
-    getLink = async (fileName: string) =>
+    getLink = async (event:any, fileName: string) =>
     {
+        event.preventDefault();
+
         const s_dat = {get_key: fileName};
         const rec_link = await fetch("http://127.0.0.1:4000/get-presign-link", 
         {
@@ -93,15 +112,15 @@ export class FormsComponent
         if(rec_link.status === 200)
         {
             const final_link = await rec_link.json();
-            //vid_tag.setAttribute("src", final_link.resp);
+            console.log(final_link);
         }
         else if(rec_link.status === 404)
         {
-            //alert(final_link.resp);
+            console.log("Error");
         }
     }
 
-    uploadFile = async (fileName: string) =>
+    uploadFile = async (event: any, fileDesc:string) =>
     {
         
     }

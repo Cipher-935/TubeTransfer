@@ -4,7 +4,9 @@ const {v4: uuid} = require("uuid");
 const error_h = require("../middlewares/Error/error_class");
 const redis = require("../redis_client");
 
-const user_sign_in = async (req, res, next) => {
+const { sendEmail } = require("../services/emailService");
+
+const user_sign_in = async (req, res) => {
   const { name, email, password } = req.body;
   const u_id = uuid();
   let existingUser = await Users.findOne({ email });
@@ -19,29 +21,29 @@ const user_sign_in = async (req, res, next) => {
         resp: "Successfully registered"
       });
     }
-<<<<<<< Updated upstream
 
     // Hash the password before storing it in the database
     const hashedPassword = await bcrypt.hash(password, 8);
 
+    const unique_string = uuidv4();
+
     const user = new Users({
-      name: name,
-      email: email,
-      password: hashedPassword,
+        user_id: unique_string,
+        name: name,
+        email: email,
+        password: hashedPassword,
     });
 
     await user.save();
 
     res.json({ success: true });
   } 
-  catch (errors) {
+  catch (error) {
     console.error("Signup Error: ", error);
     res.status(500).json({ success: false, errors: "Server Error" });
-=======
     catch(e){
         return next(new error_h(`Error registering the user`, 500));
     }
->>>>>>> Stashed changes
   }
 };
 
@@ -53,6 +55,7 @@ const user_login = async (req, res, next) => {
   }
   else{
     const isMatch = await bcrypt.compare(password, user.password);
+    
     if(isMatch){
       const session_obj = {
         username: user.name,
@@ -67,23 +70,42 @@ const user_login = async (req, res, next) => {
       else{
         return next(new error_h("Some error making the session", 500));
       }
+    if (isMatch) {
+      const data = {
+        user: {
+          id: user.user_id,
+          name: user.name,
+          email: user.email,
+        },
+      };
+
+      const token = jwt.sign(data, "secret_ecom", { expiresIn: "1h" });
+      res.json({ success: true, token, id: user.user_id });
+    } else {
+      res.status(401).json({ success: false, errors: "Server Error" });
     }
     else{
       return next(new error_h("Password was incorrect", 500));
     }
-<<<<<<< Updated upstream
   } 
-  catch (errors) {
+  catch (error) {
     console.error("Login Error: ", error);
     res.status(500).json({ success: false, errors: "Server Error" });
   }
 };
 
-module.exports = {
-  user_sign_in,
-  user_login,
-=======
-  }
+const send_recovery_email = async (req, res) => 
+{
+    const { recipient_email, OTP } = req.body;
+    try 
+    {
+      const response = await sendEmail({ recipient_email, OTP });
+      res.status(200).json({ success: true, message: response.message });
+    } 
+    catch (error) 
+    {
+      res.status(500).json({ success: true, message: error.message});
+    }
 };
 
 // const get_user_data = (req, res) =>
@@ -113,6 +135,7 @@ module.exports = {
 
 module.exports = {
   user_sign_in,
-  user_login
->>>>>>> Stashed changes
+  user_login,
+  get_user_data,
+  send_recovery_email
 };

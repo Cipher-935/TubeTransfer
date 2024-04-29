@@ -3,19 +3,20 @@
         <div class="form-row">
             <label>Enter the file name to delete from the cloud</label>
             <input type="text" #fileName>
-            <button (click)="deleteFile(fileName.value)">Delete</button>
+            <button (click)="deleteFile($event, fileName.value)">Delete</button>
         </div>
 
         <div class="form-row">
             <label>Enter the file name to get the presigned url of the file</label>
             <input type="text" #fileName2>
-            <button (click)="getLink(fileName2.value)">Get URL</button>
+            <button (click)="getLink($event, fileName2.value)">Get URL</button>
         </div>
 
         <div class="form-row">
             <label>This upload will go directly to S3 with put command</label>
-            <input type="file" (change)="onFileSelected($event)">
-            <button>Put</button>
+            <input type="file" (change)="onFileSelected($event, fileDesc.value)">
+            <textarea rows="10" cols="20" #fileDesc></textarea>
+            <!-- <button (click)="uploadFile($event, fileDesc.value)">Put</button> -->
             <button>List</button>
         </div>
     </form>

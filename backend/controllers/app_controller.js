@@ -4,7 +4,7 @@ const { S3Client, PutObjectCommand, DeleteObjectCommand, GetObjectCommand, ListO
 const {getSignedUrl} = require("@aws-sdk/s3-request-presigner"); // For generating signed urls for S3 access
 const file_model =  require("../models/file_information_model.js"); // For accessing the file schema
 const error_h = require("../middlewares/Error/error_class.js"); // Importing the custom error class
-//const redis = require("../redis_client.js"); // Redis client imported to store data in redis store, default port 6379
+
 
 // Make the S3 client globally so all functions can access it so as to be modular
 const s3 = new S3Client({
@@ -19,7 +19,7 @@ const s3 = new S3Client({
 
 // Return the static template for the home.html from the templates directory
 exports.get_home = async (req, res, next) => {
-    let file_path = path.join(__dirname, "../templates/home.html");
+    let file_path = path.join(__dirname, "../templates/signup.html");
       
     if(fs.existsSync(file_path)){
             
@@ -30,38 +30,12 @@ exports.get_home = async (req, res, next) => {
     }
 };
 
-// exports.set_session = async (req,res, next) => {
-   
-//     const val = await redis.set("ddvfdvgrnjrenvfjdnf", JSON.stringify({name: "Jay", age: 30}));
-//     const expiry = await redis.expire("ddvfdvgrnjrenvfjdnf", 60);
-//     if(val && expiry){
-//         res.status(200).json({
-//             resp: "Successfully added the session"
-//         });
-//     }
-//     else{
-//         next(new error_h("Could not add the session dueto server error", 500));
-//     }
-// }
-
 exports.test_load = async (req,res) => {
     res.status(200).json({
         resp: "Working"
     });
 }
 
-// exports.get_session = async (req,res,next) => {
-//     const s_dat = await redis.get("ddvfdvgrnjrenvfjdnf");
-//     const f_dat = await JSON.parse(s_dat);
-//     if(s_dat){
-//       res.status(200).json({
-//         resp: f_dat
-//       });
-//     }
-//     else{
-//         next(new error_h("Could not find the data with this key", 500));
-//     }
-// }
 // This functon returns a presigned url to access a private file on the s3.
 exports.get_object = async (req,res,next) => {
     const {get_key} = req.body;

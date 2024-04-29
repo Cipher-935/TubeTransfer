@@ -23,10 +23,11 @@ const path_builder = function(file_name){
 }
 
 exports.save_file_data = async (req,res,next) => {
-    const {file_name, file_type, file_description, file_mime} = req.body;
+    const {file_name, file_size, file_description, file_mime} = req.body;
     const storage_path = path_builder(file_name);
+    const user = "ffgjregjrgmfvdmfvmrsivms"
     try{
-        const file_add = await file_model.create({uploded_file_name: file_name, uploaded_file_description: file_description, uploaded_file_type: file_type, uploaded_file_storage_location: storage_path});
+        const file_add = await file_model.create({uploaded_file_owner: user, uploded_file_name: file_name, uploaded_file_description: file_description, uploaded_file_size: file_size, uploaded_file_storage_location: storage_path});
         res.locals.store_path = storage_path;
         res.locals.ftype = file_mime;
         next();

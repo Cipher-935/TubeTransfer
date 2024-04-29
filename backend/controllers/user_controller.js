@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
 const { v4: uuidv4 } = require('uuid');
+const { sendEmail } = require("../services/emailService");
 
 const user_sign_in = async (req, res) => {
   const { name, email, password } = req.body;
@@ -97,8 +98,23 @@ const get_user_data = (req, res) =>
     }
 }
 
+const send_recovery_email = async (req, res) => 
+{
+    const { recipient_email, OTP } = req.body;
+    try 
+    {
+      const response = await sendEmail({ recipient_email, OTP });
+      res.status(200).json({ success: true, message: response.message });
+    } 
+    catch (error) 
+    {
+      res.status(500).json({ success: true, message: error.message});
+    }
+};
+
 module.exports = {
   user_sign_in,
   user_login,
-  get_user_data
+  get_user_data,
+  send_recovery_email
 };

@@ -16,6 +16,13 @@
           <label for="password">Password</label>
           <input type="password" id="password" name="password" ngModel required>
         </div>
+        <div *ngIf="isOTPView">
+            <div class="form-group">
+                <label for="otp">Enter OTP code here: </label>
+                <input type="text" id="otp" name="otp" #inputOTP ngModel required>
+                <button (click)="verifyOTP(inputOTP.value)">Enter</button>
+            </div>
+        </div>
         <button type="submit">{{ isLogin ? 'Login' : 'Sign Up' }}</button>
       </form>
       <p>{{ isLogin ? 'Don\'t have an account?' : 'Already have an account?' }} <a (click)="toggleForm()">{{ isLogin ? 'Sign up' : 'Login' }}</a></p>

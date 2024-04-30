@@ -1,11 +1,11 @@
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { Component, Input } from '@angular/core';
 import { CommunicationService } from '../../services/communication.service';
 import { CommonModule } from '@angular/common';
 import { VideoPlayerComponent } from '../../components/video-player/video-player.component';
 import { FileUploadComponent } from '../../components/file-upload/file-upload.component';
-import { File } from 'buffer';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { FormsModule, NgModel } from '@angular/forms';
 
 // Optional: Define an interface for the data sent to the backend
 interface DeleteObject 
@@ -16,7 +16,8 @@ interface DeleteObject
 @Component({
   selector: 'app-forms',
   standalone: true,
-  imports: [HttpClientModule, CommonModule, VideoPlayerComponent, FileUploadComponent],
+  imports: [HttpClientModule, CommonModule, VideoPlayerComponent, 
+    FileUploadComponent, FormsModule],
   templateUrl: './forms.component.html',
   styleUrl: './forms.component.css'
 })
@@ -28,7 +29,12 @@ export class FormsComponent
     fileIsSubmitted: boolean = false;
 
     fileName: string = "";
-    //fileContent: string = "";
+    fileExtensionName: string = "";
+
+    newFileName: string = "";
+
+    // To assign uploaded file
+    uploadedFile: any;
     
     @Input()src!: SafeResourceUrl;
 
@@ -70,6 +76,8 @@ export class FormsComponent
     {
         const extension = file.name.match(/\.([^.]+)$/)?.[1]?.toLowerCase();
 
+        this.fileExtensionName = "." + extension;
+
         switch(extension)
         {
             case 'exe':
@@ -98,49 +106,12 @@ export class FormsComponent
                     console.log(this.src);
                 };
                 reader.readAsDataURL(file);
+
+                this.uploadedFile = file;
                 
                 break;
             }
         }
-    }
-
-
-    onFileSelected = async (event: any, fileDesc:string) =>
-    {
-        event.preventDefault();
-        const file = event.target.files[0];
-
-        const mfile = {file_name: file.name, file_mime: file.type, file_description: fileDesc, file_type: "nomral"};
-         const rec_put_link = await fetch("http://127.0.0.1:4000/get-put-url",{
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(mfile)
-         });
-         if(rec_put_link.status === 200){
-            const final_url = await rec_put_link.json();
-            const put_req = await fetch(final_url.resp, {
-                method: "PUT",
-                headers: 
-                {
-                    "Content-Type": file.type
-                },
-                body: file
-            });
-            
-            if(put_req.status === 200)
-                {
-                alert("Hey the file was uploaded");
-            }
-            else
-            {
-                alert("Something went wrong");
-            }
-         }
-         else
-         {
-            const j_resp = await rec_put_link.json();
-            alert(j_resp.resp);
-         }
     }
 
     deleteFile = async (event: any, fileName: string) =>
@@ -208,6 +179,40 @@ export class FormsComponent
 
     uploadFile = async (event: any, fileDesc:string) =>
     {
-        
+        event.preventDefault();
+        const mfile = {file_name: this.fileName + this.fileExtensionName, file_mime: this.uploadedFile.type, file_description: fileDesc, file_type: "nomral"};
+
+        const rec_put_link = await fetch("http://127.0.0.1:4000/get-put-url",{
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(mfile)
+        });
+        if(rec_put_link.status === 200)
+        {
+            const final_url = await rec_put_link.json();
+            const put_req = await fetch(final_url.resp, 
+            {
+                method: "PUT",
+                headers: 
+                {
+                    "Content-Type": this.uploadedFile.type
+                },
+                body: this.uploadedFile
+            });
+            
+            if(put_req.status === 200)
+            {
+                alert("Hey the file was uploaded");
+            }
+            else
+            {
+                alert("Something went wrong");
+            }
+        }
+        else
+        {
+            const j_resp = await rec_put_link.json();
+            alert(j_resp.resp);
+        }
     }
 }

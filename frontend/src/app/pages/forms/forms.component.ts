@@ -3,6 +3,9 @@ import { Component, Input } from '@angular/core';
 import { CommunicationService } from '../../services/communication.service';
 import { CommonModule } from '@angular/common';
 import { VideoPlayerComponent } from '../../components/video-player/video-player.component';
+import { FileUploadComponent } from '../../components/file-upload/file-upload.component';
+import { File } from 'buffer';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 // Optional: Define an interface for the data sent to the backend
 interface DeleteObject 
@@ -13,15 +16,94 @@ interface DeleteObject
 @Component({
   selector: 'app-forms',
   standalone: true,
-  imports: [HttpClientModule, CommonModule, VideoPlayerComponent],
+  imports: [HttpClientModule, CommonModule, VideoPlayerComponent, FileUploadComponent],
   templateUrl: './forms.component.html',
   styleUrl: './forms.component.css'
 })
 export class FormsComponent 
 {
-    //constructor(private fileReader:FileReader) {}
+    constructor(private sanitizer: DomSanitizer) {}
 
-    @Input()src!: string;
+    isDraggingOver: boolean = false;
+    fileIsSubmitted: boolean = false;
+
+    fileName: string = "";
+    //fileContent: string = "";
+    
+    @Input()src!: SafeResourceUrl;
+
+    onDragOver(event: DragEvent) 
+    {
+        event.preventDefault();
+        event.stopPropagation();
+        event.dataTransfer!.dropEffect = 'copy';
+        this.isDraggingOver = true;
+    }
+    
+    onDragLeave(event: DragEvent) 
+    {
+        event.preventDefault();
+        event.stopPropagation();
+        this.isDraggingOver = false;
+    }
+
+    onDropFile(event: DragEvent)
+    {
+        event.preventDefault();
+        event.stopPropagation();
+
+        this.isDraggingOver = false;
+
+        const files = event.dataTransfer?.files;
+        if (files && files.length > 0)
+        {
+            console.log("Files dropped: ", files[0]);
+            this.fileName = files[0].name.substring(0, files[0].name.lastIndexOf("."));
+            
+            // Read file content
+            this.ReadFIleContent(files[0]);
+        }
+    }
+
+    // For detecting the file type and reading it accordingly
+    ReadFIleContent(file: any)
+    {
+        const extension = file.name.match(/\.([^.]+)$/)?.[1]?.toLowerCase();
+
+        switch(extension)
+        {
+            case 'exe':
+            case 'zip':
+            case '7z':
+            case 'gz':
+            case 'bat':
+            case 'psl':
+            case 'dat':
+            {
+                alert("File type not supported");
+                break;
+            }
+            default:
+            {
+                const reader = new FileReader();
+                reader.onload = () => {
+                    const dataUrl = reader.result as string; // Assuming fileContent is a base64-encoded string
+                    console.log(dataUrl);
+
+                    // Assuming this.sanitizer is from Angular's DomSanitizer
+                    this.src = this.sanitizer.bypassSecurityTrustResourceUrl(dataUrl) as SafeResourceUrl;
+
+                    this.fileIsSubmitted = true;
+
+                    console.log(this.src);
+                };
+                reader.readAsDataURL(file);
+                
+                break;
+            }
+        }
+    }
+
 
     onFileSelected = async (event: any, fileDesc:string) =>
     {
@@ -38,20 +120,24 @@ export class FormsComponent
             const final_url = await rec_put_link.json();
             const put_req = await fetch(final_url.resp, {
                 method: "PUT",
-                headers: {
+                headers: 
+                {
                     "Content-Type": file.type
                 },
                 body: file
             });
             
-            if(put_req.status === 200){
+            if(put_req.status === 200)
+                {
                 alert("Hey the file was uploaded");
             }
-            else{
+            else
+            {
                 alert("Something went wrong");
             }
          }
-         else{
+         else
+         {
             const j_resp = await rec_put_link.json();
             alert(j_resp.resp);
          }

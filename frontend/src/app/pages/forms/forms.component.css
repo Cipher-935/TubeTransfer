@@ -1,55 +1,158 @@
+.upload-container 
+{
+    margin: auto;
+    width: 100%;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background-color: inherit;
+}
+
+.upload-box 
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 50%;
+    width: 80%;
+    height: 50%;
+    border: 2px dashed #ccc;
+    border-radius: 5px;
+    color: #ccc;
+}
+
+.upload-box:hover 
+{
+    border-color: #aaa;
+    border-style: double;
+}
+
+.upload-box.dragover 
+{
+    border-color: #004b23;
+}
+
+h2 
+{
+    margin: 0;
+}
+
+.upload-container h2 
+{
+    font-size: 50px;
+    margin-bottom: 20px;
+}
+
+.upload-box.dragover h2 
+{
+    color: #392467;
+}
+
+.upload-container .drag-message 
+{
+    align-items: center;
+    font-size: 50px;
+}
+
 .upload-details 
 {
-    border-radius: 4px;
-    padding: 20px;
     margin-top: 20px;
-    max-width: 1000px;
+}
+
+.upload-details form 
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.container 
+{
+    display: flex;
+    height: 1000px;
+}
+
+.form
+{
+    max-width: 800px;
     margin: auto;
 }
 
-/* Form row styling */
-.form-row 
+.form-container 
 {
-    display: flex;
-    margin-bottom: 10px;
-    align-items: center;
+    flex: 1;
+    padding: 20px;
+    border-right: 1px solid #ccc;
+    
 }
 
-/* Label styles */
-.form-row label 
+.form-container h2 
 {
-    flex: 2;
-    font-size: 14px;
-    color: #333;
-    margin-right: 10px;
+    margin-top: 0;
 }
 
-/* Input styles */
-.form-row input[type="text"] 
+.form-group 
 {
-    flex: 3;
-    padding: 8px;
+    margin-bottom: 15px;
+}
+
+.form-group label 
+{
+    display: block;
+    font-weight: 300;
+}
+
+.form-group input[type="text"],
+.form-group input[type="category"],
+.form-group textarea 
+{
+    width: 100%;
+    padding: 15px;
     border: 1px solid #ccc;
-    border-radius: 3px;
+    border-radius: 4px;
 }
 
-/* Button styles */
-.upload-details button 
+.form-group textarea 
 {
-    background-color: #392467;
+    height: 200px;
+    resize: none;
+}
+
+button[type="submit"] 
+{
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #004b23;
     color: #fff;
-    padding: 8px 12px;
     border: none;
-    border-radius: 3px;
+    border-radius: 4px;
     cursor: pointer;
-    margin-right: 10px;
-    margin-left: 10px;
+    max-width: 100px;
+    right: 100%;
 }
 
-
-/* Style variation for "Upload to S3" and "Stream to server" buttons */
-.upload-details button:not(.form-row button) 
+.preview 
 {
-    background-color: #392467;
-    font-size: 16px;
+    flex: 1;
+    padding: 20px;
+}
+
+.preview h2 
+{
+    margin-top: 0;
+}
+
+.preview-content 
+{
+    overflow: auto;
+}
+
+.preview iframe
+{
+    min-height: 600px;
 }

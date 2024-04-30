@@ -4,22 +4,22 @@
     align-items: center;
     justify-content: space-between;
     height: 100px;
-    background-color: #392467;
+    background-color: #004b23;
     padding: 0px 10%;
 }
 
 .logo-container a
 {
     color: #EEF0E5;
-    font-weight: 200;
-    font-size: 20px;
+    font-weight: 500;
+    font-size: 30px;
     text-decoration: none;
 }
 
 .header-container p
 {
     color: #EEF0E5;
-    font-weight: 100;
+    font-weight: 200;
     font-size: 15px;
 }
 

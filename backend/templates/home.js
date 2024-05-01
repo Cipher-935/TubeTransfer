@@ -18,20 +18,16 @@ document.addEventListener("DOMContentLoaded", () => {
         headers: {"Content-Type": "application/json"}, 
         body: JSON.stringify(obj)
     });
-    if(rec_list.status === 200){
-        const d_list = await rec_list.json();
-        alert(d_list.resp);
-    }
-    else{
-        alert("Did not receive anything");
-    }
+    const d_list = await rec_list.json();
+    alert(d_list.resp);
+
    }); 
 
    btn_get_link.addEventListener("click", async (e) => {
     e.preventDefault();
     const link_key = document.getElementById("file_name").value;
     const s_dat = {get_key: link_key};
-    const rec_link = await fetch("http://127.0.0.1:4000/get-presign-link", {
+    const rec_link = await fetch("http://127.0.0.1:4000/download", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify(s_dat)
@@ -60,9 +56,10 @@ document.addEventListener("DOMContentLoaded", () => {
       e.preventDefault();
       const d_file = document.getElementById("d_file");
       const file_desc = document.querySelector(".file_description");
-      if(d_file.files.length > 0 && file_desc.value != ""){
-         const mfile = {file_name: d_file.files[0].name, file_mime: d_file.files[0].type, file_description: file_desc.value, file_type: "nomral"};
-         const rec_put_link = await fetch("http://127.0.0.1:4000/get-put-url",{
+      if(d_file.files.length > 0){
+        console.log(d_file.files[0].type);
+         const mfile = {file_name: d_file.files[0].name, file_mime: d_file.files[0].type, file_description: file_desc.value, file_size: d_file.files[0].size, file_category: ''};
+         const rec_put_link = await fetch("http://127.0.0.1:4000/upload",{
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify(mfile)

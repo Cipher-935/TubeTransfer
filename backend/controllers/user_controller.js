@@ -23,6 +23,7 @@ const user_sign_in = async (req, res) => {
     catch(e){
         return next(new error_h(`Error registering the user`, 500));
     }
+  }
 };
 
 const user_login = async (req, res, next) => {

@@ -43,8 +43,6 @@ export class LoginComponent {
             {
                 if (data.success)
                 {
-                    localStorage.setItem('auth-token', data.token);
-
                     window.location.replace("/");
                 }
                 else

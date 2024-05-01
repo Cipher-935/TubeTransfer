@@ -4,7 +4,16 @@
     </div>
     <div class="info">
         <h1 class="title">Name of file</h1>
-        <div class="description {{ descIsOpened ? 'opened' : '' }}" (click)="ToggleDescription()">
+        <div class="metadata">
+            <span>Category: DSA</span>
+            <span>Date: 2024-04-30</span>
+            <span>Author: Username</span>
+            <span>(icons:)</span>
+            <span>SHARE</span>
+            <span>DOWNLOAD</span>
+            <span>DELETE</span>
+        </div>
+        <div class="description {{ descIsOpened ? 'opened' : '' }}" (click)="OpenDescription()">
             <p>
                 Description...
             <br/>
@@ -22,14 +31,8 @@
                 Idea: There should be max characters when the user is writing the description on the file upload page.
             </p>
         </div>
-        <div class="metadata">
-            <span>Category: DSA</span>
-            <span>Date: 2024-04-30</span>
-            <span>Author: Username</span>
-            <span>(icons:)</span>
-            <span>SHARE</span>
-            <span>DOWNLOAD</span>
-            <span>DELETE</span>
+        <div *ngIf="descIsOpened" class="show-less-link" (click)="CloseDescription()">
+            <a>show less</a>
         </div>
     </div>
   </div>

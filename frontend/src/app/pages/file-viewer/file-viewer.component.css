@@ -34,6 +34,7 @@ body
 {
     font-size: 24px;
     margin: 0;
+    font-weight: 400;
 }
 
 .description 
@@ -58,6 +59,7 @@ body
 {
     height: 300px;
     overflow: scroll;
+    cursor: auto;
 }
 
 .metadata 
@@ -69,4 +71,12 @@ body
 {
     margin-right: 20px;
     color: #606060;
+}
+
+.show-less-link
+{
+    text-decoration: underline;
+    color: blue;
+    margin-top: 10px;
+    cursor: pointer;
 }

@@ -1,28 +1,27 @@
 const Users = require("../models/user_model");
 const bcrypt = require("bcryptjs");
-const {v4: uuid} = require("uuid");
 const error_h = require("../middlewares/Error/error_class");
-const redis = require("../redis_client");
+const jwt = require("jsonwebtoken");
 
 const { sendEmail } = require("../services/emailService");
 
 const user_sign_in = async (req, res) => {
   const { name, email, password } = req.body;
-  const u_id = uuid();
   let existingUser = await Users.findOne({ email });
   if(existingUser){
     return next(new error_h(`User with this id exists`, 400));
   }
   else{
-        try{
-            const hashedPassword = await bcrypt.hash(password, 8);
-            const added_user = await Users.create({name: name, email: email, password: hashedPassword, user_id: u_id})
-            res.status(200).json({
-            resp: "Successfully registered"
-            });
-        }catch(e){
-            return next(new error_h(`Error registering the user`, 500));
-        }
+
+    try{
+      const hashedPassword = await bcrypt.hash(password, 8);
+      const added_user = await Users.create({name: name, email: email, password: hashedPassword})
+      res.status(200).json({
+        resp: "Successfully registered"
+      });
+    }
+    catch(e){
+        return next(new error_h(`Error registering the user`, 500));
     }
 };
 
@@ -34,37 +33,18 @@ const user_login = async (req, res, next) => {
   }
   else{
     const isMatch = await bcrypt.compare(password, user.password);
-    
     if(isMatch){
-      const session_obj = {
-        username: user.name,
-      };
-      const add_session = await redis.set(user.user_id, JSON.stringify(session_obj));
-      const expire_session = redis.expire(user.user_id, 120);
-      if(add_session && expire_session){
+        const pay = {u_id: user._id};
+        const token = jwt.sign(pay, process.env.sessionKey, {expiresIn: "30m"});
+        res.cookie("uid", token, {secure: true});
         res.status(200).json({
-          resp: "Successfully logged in"
+           resp: "Successfully logged in"
         });
-      }
-      else{
+    }
+    else{
         return next(new error_h("Some error making the session", 500));
       }
-    if (isMatch) {
-      const data = {
-        user: {
-          id: user.user_id,
-          name: user.name,
-          email: user.email,
-        },
-      };
-
-      const token = jwt.sign(data, "secret_ecom", { expiresIn: "1h" });
-      res.json({ success: true, token, id: user.user_id });
-    } 
-    else{
-      return next(new error_h("Password was incorrect", 500));
-    }
-  }
+  
 }
 };
 

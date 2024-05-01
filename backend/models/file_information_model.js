@@ -17,11 +17,15 @@ const file_schema = mongoose.Schema({
         required: true
     },
 
-    uploaded_file_owner: {
+    uploaded_file_category:{
         type: String,
-        ref: "Users.user_id",
+        default: "General"
+    },
+
+    uploaded_file_owner: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "users",
         required: true
-        
     },
     
     uploaded_file_size: {
@@ -31,6 +35,7 @@ const file_schema = mongoose.Schema({
     
     uploaded_file_storage_location: {
         type: String,
+        unique: true,
         required: true
     }
 });

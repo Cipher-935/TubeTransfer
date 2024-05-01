@@ -5,7 +5,7 @@ import { FileUploadComponent } from '../../components/file-upload/file-upload.co
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [HeroComponent, FileUploadComponent],
+  imports: [HeroComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })

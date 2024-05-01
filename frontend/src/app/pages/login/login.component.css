@@ -38,7 +38,7 @@ button
 {
     width: 100%;
     padding: 10px;
-    background-color: #392467;
+    background-color: #004b23;
     color: #fff;
     border: none;
     border-radius: 5px;
@@ -47,7 +47,7 @@ button
 
 button:hover 
 {
-    background-color: #5a3c9f;
+    background-color: #017135;
 }
 
 p 

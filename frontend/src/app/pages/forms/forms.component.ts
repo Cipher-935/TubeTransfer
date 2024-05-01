@@ -1,8 +1,11 @@
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { Component, Input } from '@angular/core';
 import { CommunicationService } from '../../services/communication.service';
 import { CommonModule } from '@angular/common';
 import { VideoPlayerComponent } from '../../components/video-player/video-player.component';
+import { FileUploadComponent } from '../../components/file-upload/file-upload.component';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { FormsModule, NgModel } from '@angular/forms';
 
 // Optional: Define an interface for the data sent to the backend
 interface DeleteObject 
@@ -13,36 +16,107 @@ interface DeleteObject
 @Component({
   selector: 'app-forms',
   standalone: true,
-  imports: [HttpClientModule, CommonModule, VideoPlayerComponent],
+  imports: [HttpClientModule, CommonModule, VideoPlayerComponent, 
+    FileUploadComponent, FormsModule],
   templateUrl: './forms.component.html',
   styleUrl: './forms.component.css'
 })
 export class FormsComponent 
 {
-    //constructor(private fileReader:FileReader) {}
+    constructor(private sanitizer: DomSanitizer) {}
 
-    @Input()src!: string;
+    isDraggingOver: boolean = false;
+    fileIsSubmitted: boolean = false;
 
-    onFileSelected(event: any) 
+    fileName: string = "";
+    fileExtensionName: string = "";
+
+    newFileName: string = "";
+
+    // To assign uploaded file
+    uploadedFile: any;
+    
+    @Input()src!: SafeResourceUrl;
+
+    onDragOver(event: DragEvent) 
     {
-        const reader = new FileReader();
-        const file = event.target.files[0];
-      
-        reader.onload = (e: any) => 
+        event.preventDefault();
+        event.stopPropagation();
+        event.dataTransfer!.dropEffect = 'copy';
+        this.isDraggingOver = true;
+    }
+    
+    onDragLeave(event: DragEvent) 
+    {
+        event.preventDefault();
+        event.stopPropagation();
+        this.isDraggingOver = false;
+    }
+
+    onDropFile(event: DragEvent)
+    {
+        event.preventDefault();
+        event.stopPropagation();
+
+        this.isDraggingOver = false;
+
+        const files = event.dataTransfer?.files;
+        if (files && files.length > 0)
         {
-          // Handle the loaded file content
-          const videoUrl = e.target.result;
-          this.src = videoUrl; 
-        };
+            console.log("Files dropped: ", files[0]);
+            this.fileName = files[0].name.substring(0, files[0].name.lastIndexOf("."));
+            
+            // Read file content
+            this.ReadFIleContent(files[0]);
+        }
+    }
 
-        // Read the file as a data URL (for testing)
-        reader.readAsDataURL(file);
-
-        console.log(file);
-      }
-
-    deleteFile = async (fileName: string) =>
+    // For detecting the file type and reading it accordingly
+    ReadFIleContent(file: any)
     {
+        const extension = file.name.match(/\.([^.]+)$/)?.[1]?.toLowerCase();
+
+        this.fileExtensionName = "." + extension;
+
+        switch(extension)
+        {
+            case 'exe':
+            case 'zip':
+            case '7z':
+            case 'gz':
+            case 'bat':
+            case 'psl':
+            case 'dat':
+            {
+                alert("File type not supported");
+                break;
+            }
+            default:
+            {
+                const reader = new FileReader();
+                reader.onload = () => {
+                    const dataUrl = reader.result as string; // Assuming fileContent is a base64-encoded string
+                    console.log(dataUrl);
+
+                    // Assuming this.sanitizer is from Angular's DomSanitizer
+                    this.src = this.sanitizer.bypassSecurityTrustResourceUrl(dataUrl) as SafeResourceUrl;
+
+                    this.fileIsSubmitted = true;
+
+                    console.log(this.src);
+                };
+                reader.readAsDataURL(file);
+
+                this.uploadedFile = file;
+                
+                break;
+            }
+        }
+    }
+
+    deleteFile = async (event: any, fileName: string) =>
+    {
+        event.preventDefault();
         console.log(fileName);
 
         // Construct the DeleteObject instance
@@ -81,8 +155,10 @@ export class FormsComponent
         }
     }
 
-    getLink = async (fileName: string) =>
+    getLink = async (event:any, fileName: string) =>
     {
+        event.preventDefault();
+
         const s_dat = {get_key: fileName};
         const rec_link = await fetch("http://127.0.0.1:4000/get-presign-link", 
         {
@@ -93,16 +169,50 @@ export class FormsComponent
         if(rec_link.status === 200)
         {
             const final_link = await rec_link.json();
-            //vid_tag.setAttribute("src", final_link.resp);
+            console.log(final_link);
         }
         else if(rec_link.status === 404)
         {
-            //alert(final_link.resp);
+            console.log("Error");
         }
     }
 
-    uploadFile = async (fileName: string) =>
+    uploadFile = async (event: any, fileDesc:string) =>
     {
-        
+        event.preventDefault();
+        const mfile = {file_name: this.fileName + this.fileExtensionName, file_mime: this.uploadedFile.type, file_description: fileDesc, file_type: "nomral"};
+
+        const rec_put_link = await fetch("http://127.0.0.1:4000/get-put-url",{
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(mfile)
+        });
+        if(rec_put_link.status === 200)
+        {
+            const final_url = await rec_put_link.json();
+            const put_req = await fetch(final_url.resp, 
+            {
+                method: "PUT",
+                headers: 
+                {
+                    "Content-Type": this.uploadedFile.type
+                },
+                body: this.uploadedFile
+            });
+            
+            if(put_req.status === 200)
+            {
+                alert("Hey the file was uploaded");
+            }
+            else
+            {
+                alert("Something went wrong");
+            }
+        }
+        else
+        {
+            const j_resp = await rec_put_link.json();
+            alert(j_resp.resp);
+        }
     }
 }

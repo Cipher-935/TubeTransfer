@@ -80,3 +80,8 @@ body
     margin-top: 10px;
     cursor: pointer;
 }
+
+.file-viewer-container
+{
+    margin-bottom: 200px;
+}

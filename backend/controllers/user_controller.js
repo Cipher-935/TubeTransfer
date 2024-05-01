@@ -45,7 +45,6 @@ const user_login = async (req, res, next) => {
     else{
         return next(new error_h("Some error making the session", 500));
       }
-  
 }
 };
 
@@ -63,34 +62,8 @@ const send_recovery_email = async (req, res) =>
     }
 };
 
-// const get_user_data = (req, res) =>
-// {
-//     try
-//     {
-//         // Extracting the token from the authorization header
-//         const token = req.headers.authorization?.split(" ")[1];
-//         if (!token)
-//         {
-//             return res.status(401).json({success: false, message: 'No token provided'});
-//         }
-
-//         const decoded = jwt.verify(token, 'secret_ecom');
-//         res.status(200).json(
-//         {
-//             success: true,
-//             name: decoded.user.name,
-//             email: decoded.user.email
-//         });
-//     }
-//     catch (error)
-//     {
-//         res.status(401).json({ success: false, message: 'Invalid or expired token' });
-//     }
-// }
-
 module.exports = {
   user_sign_in,
   user_login,
-  get_user_data,
   send_recovery_email
 };

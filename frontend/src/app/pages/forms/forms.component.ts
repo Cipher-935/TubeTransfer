@@ -30,6 +30,7 @@ export class FormsComponent
 
     fileName: string = "";
     fileExtensionName: string = "";
+    fileSize: number = 0;
 
     newFileName: string = "";
 
@@ -65,6 +66,7 @@ export class FormsComponent
         {
             console.log("Files dropped: ", files[0]);
             this.fileName = files[0].name.substring(0, files[0].name.lastIndexOf("."));
+            this.fileSize = files[0].size;
             
             // Read file content
             this.ReadFIleContent(files[0]);
@@ -116,30 +118,7 @@ export class FormsComponent
 
     deleteFile = async (event: any, fileName: string) =>
     {
-        event.preventDefault();
-        console.log(fileName);
-
-        // Construct the DeleteObject instance
-        const deleteData: DeleteObject = 
-        {
-            main_key: fileName
-        };
-
-        const rec_list = await fetch("http://127.0.0.1:4000/delete", 
-        {
-            method: "POST",
-            headers: {"Content-Type": "application/json"}, 
-            body: JSON.stringify(deleteData)
-        });
-        if(rec_list.status === 200)
-        {
-            const d_list = await rec_list.json();
-            alert(d_list.resp);
-        }
-        else
-        {
-            alert("Did not receive anything");
-        }
+    
     }
 
     enableDeleteButton(value: string) 
@@ -180,10 +159,11 @@ export class FormsComponent
     uploadFile = async (event: any, fileDesc:string) =>
     {
         event.preventDefault();
-        const mfile = {file_name: this.fileName + this.fileExtensionName, file_mime: this.uploadedFile.type, file_description: fileDesc, file_type: "nomral"};
+        const mfile = {file_name: this.fileName + this.fileExtensionName, file_mime: this.uploadedFile.type, file_description: fileDesc, file_category: "", file_size: this.fileSize};
 
-        const rec_put_link = await fetch("http://127.0.0.1:4000/get-put-url",{
+        const rec_put_link = await fetch("http://127.0.0.1:4000/upload",{
             method: "POST",
+            credentials: 'include',
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify(mfile)
         });

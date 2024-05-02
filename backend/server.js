@@ -27,7 +27,7 @@ const app_route_handler = require("./Routes/app_routes.js");
 const user_route_handler = require("./Routes/user_routes.js");
 const error_handler = require("./middlewares/Error/error_handler.js");
 const cookie_p = require("cookie-parser");
-const helmet = require("helmet");
+//const helmet = require("helmet");
 const rate_limiter = require("express-rate-limit"); // Rate limiting per IP
 const l_obj = rate_limiter.rateLimit({
     windowMs: 3 * 60 * 100,
@@ -35,13 +35,26 @@ const l_obj = rate_limiter.rateLimit({
     message: "<h1>You are locked out due to excessive requests</h1>"
 });
 app.use(l_obj);
-app.use(helmet());
+//app.use(helmet());
 app.use(bodyParser.urlencoded({ extended: false })); // For handling the url encoded body data often in file uploads
 app.use(express.json()); // Middleware to exchange data in json format
- 
-app.use(cors()); // For cross origin request handling
+
+// app.all('/*', (req, res, next) =>
+// {
+//     res.setHeader('Access-Control-Allow-Origin', '*');
+//   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+//   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization', 'Content-Length, X-Requested-With');
+
+//   // Allow credentials (cookies, authorization headers) to be sent cross-origin
+//   res.setHeader('Access-Control-Allow-Credentials', 'true');
+// });
+
+app.use(cors({ origin: 'http://127.0.0.1:4200', credentials: true })); // For cross origin request handling
+
+
+
 app.use('/templates', express.static(path.join(__dirname, 'templates')));// Serve static files from the 'templates' directory
-app.use(cors());
+
 app.use(cookie_p());
 const user_routes = require('./Routes/user_routes.js');
 // Serve static files from the 'templates' directory

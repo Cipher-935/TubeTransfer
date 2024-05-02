@@ -29,36 +29,29 @@ export class LoginComponent {
             console.log("Login: ", form.value);
 
             console.log("JSON: ", JSON.stringify(form.value));
-            await fetch('http://localhost:4000/user/login',
+            const send_reg = await fetch('http://127.0.0.1:4000/login',
             {
                 method: 'POST',
+                credentials: 'include',
                 headers:
                 {
                     Accept: 'application/form-data',
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(form.value),
-            }).then((response) => response.json())
-            .then((data) => 
-            {
-                if (data.success)
-                {
-                    window.location.replace("/");
-                }
-                else
-                {
-                    alert("Error occured while logging in");
-                }
             });
-        }
-        else
-        {
-            if (this.isOTPView)
-                return;
 
-            this.formHolder = form;
-            this.goToOTP(this.formHolder.value.email);
+            const r_dat = await send_reg.json();
+            alert(r_dat.resp);
         }
+        // else
+        // {
+        //     if (this.isOTPView)
+        //         return;
+
+        //     this.formHolder = form;
+        //     this.goToOTP(this.formHolder.value.email);
+        // }
     }
 
     goToOTP(localEmail: string)

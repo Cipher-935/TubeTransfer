@@ -4,15 +4,18 @@
     </div>
     <div class="info">
         <h1 class="title">Name of file</h1>
-        <div class="metadata">
-            <span>Category: DSA</span>
-            <span>Date: 2024-04-30</span>
-            <span>Size: 50MB</span>
-            <span>Author: Username</span>
-            <span>(icons:)</span>
-            <span>SHARE</span>
-            <span>DOWNLOAD</span>
-            <span>DELETE</span>
+        <div class="">
+            <div class="more-info">
+                <span>Category: DSA</span>
+                <span>Date: 2024-04-30</span>
+                <span>Size: 50MB</span>
+                <span>Author: Username</span>
+            </div>
+            <div class="buttons">
+                <button>SHARE</button>
+                <button>DOWNLOAD</button>
+                <button>DELETE</button>
+            </div>
         </div>
         <div class="description {{ descIsOpened ? 'opened' : '' }}" (click)="OpenDescription()">
             <p>

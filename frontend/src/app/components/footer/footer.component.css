@@ -24,6 +24,7 @@
 .footer .footer-container 
 {
     max-width: 1200px;
+    height: 35px;
     margin: 0 auto;
     text-align: center;
 }

@@ -3,7 +3,6 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './components/header/header.component';
 import { HeroComponent } from './components/hero/hero.component';
-import { FileUploadComponent } from './components/file-upload/file-upload.component';
 import { CommunicationService } from './services/communication.service';
 import { FooterComponent } from './components/footer/footer.component';
 
@@ -11,7 +10,7 @@ import { FooterComponent } from './components/footer/footer.component';
 {
     selector: 'app-root',
     standalone: true,
-    imports: [RouterOutlet, HttpClientModule, HeaderComponent, HeroComponent, FileUploadComponent,
+    imports: [RouterOutlet, HttpClientModule, HeaderComponent, HeroComponent,
         FooterComponent],
     templateUrl: './app.component.html',
     styleUrl: './app.component.css'

@@ -16,7 +16,6 @@ export class HeaderComponent
 
     ngOnInit()
     {
-        //console.log(document.cookie);
         this.getUserData();
     }
 
@@ -30,13 +29,13 @@ export class HeaderComponent
 
         if(rec_dat.status === 200){
             const final_data = await rec_dat.json();
-            console.log(final_data.all_files);
-            console.log(final_data.f_name);
+
+            this.isLogin = true;
+            this.userName = final_data.f_name;
         }
         else
         {
-            const s = await rec_dat.json();
-            alert(s.resp);
+            this.isLogin = false;
         }
     }
     

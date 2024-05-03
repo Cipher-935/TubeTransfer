@@ -56,7 +56,6 @@ app.use(cors({ origin: 'http://127.0.0.1:4200', credentials: true })); // For cr
 app.use('/templates', express.static(path.join(__dirname, 'templates')));// Serve static files from the 'templates' directory
 
 app.use(cookie_p());
-const user_routes = require('./Routes/user_routes.js');
 // Serve static files from the 'templates' directory
 app.use('/templates', express.static(path.join(__dirname, 'templates'))); // For serving files that are static
 app.use("/", app_route_handler); // using the route handler to server multiple routes
@@ -64,9 +63,6 @@ app.use("/", user_route_handler);
 
 
 // Unhandled routes go here
-
-// User routes
-app.use("/user", user_routes);
 
 app.get("*", (req,res) => {
     res.status(200).json({

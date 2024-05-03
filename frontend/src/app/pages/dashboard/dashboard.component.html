@@ -1,0 +1,63 @@
+<div class="search">
+    <input type="text" [(ngModel)]="name" placeholder="Search for file..." (keyup)="onKeyUp($event)">
+    <button (click)="searchFiles()">Search</button>
+  </div>
+
+<div class="main_frame">
+
+    <div class="data-item headers" (mousemove)="updateTooltipPosition($event, 'Sort')" (mouseleave)="removeToolTip()">
+        <h2 class="file-name-container" (click)="sortFiles('name')">File Name</h2>
+        <h2 class="file-desc-container" (click)="sortFiles('description')">Description</h2>
+        <h2 class="file-date-container" (click)="sortFiles('date')">Uploaded on</h2>
+        <h2 class="file-category-container" (click)="sortFiles('category')">Category</h2>
+
+        <div class="span-buttons invisible">
+            <button class="icon-button">
+                <img src="../../../assets/images/icons/eye.png" alt="View icon">
+            </button>
+            <button class="icon-button">
+                <img src="../../../assets/images/icons/download.png" alt="Share icon">
+            </button>
+            <button class="icon-button">
+                <img src="../../../assets/images/icons/trash.png" alt="Delete icon">
+            </button>
+            <button class="icon-button">
+                <img src="../../../assets/images/icons/share.png" alt="Share icon">
+            </button>
+        </div>
+    </div>
+    <div class="data-item items" *ngFor="let file of filteredFiles">
+        <h3 class="file-name-container">{{ file.uploded_file_name }}</h3>
+        <h3 class="file-desc-container">{{ file.uploaded_file_description }}</h3>
+        <h3 class="file-date-container">{{ file.uploaded_file_date | date:'longDate' }}</h3>
+        <h3 class="file-category-container">{{ file.uploaded_file_category }}</h3>
+
+        <div class="span-buttons">
+            <button class="icon-button" (click)="viewFile(file)" (mousemove)="updateTooltipPosition($event, 'View')" (mouseleave)="removeToolTip()">
+                <img src="../../../assets/images/icons/eye.png" alt="View icon">
+            </button>
+            <button class="icon-button" (click)="downloadFile(file, file.uploaded_file_storage_location)" (mousemove)="updateTooltipPosition($event, 'Download')" (mouseleave)="removeToolTip()">
+                <img src="../../../assets/images/icons/download.png" alt="Download icon">
+            </button>
+            <button class="icon-button" (click)="deleteFile(file.uploaded_file_storage_location)" (mousemove)="updateTooltipPosition($event, 'Delete')" (mouseleave)="removeToolTip()">
+                <img src="../../../assets/images/icons/trash.png" alt="Delete icon">
+            </button>
+            <button class="icon-button" (click)="shareFile(file.uploaded_file_storage_location)" (mousemove)="updateTooltipPosition($event, 'Share')" (mouseleave)="removeToolTip()">
+                <img src="../../../assets/images/icons/share.png" alt="Share icon">
+            </button>
+        </div>
+    </div>
+    <span class="tooltip" #tooltip>
+        {{tooltipMessage}}
+    </span>
+    <div class="message" *ngIf="!files.length">
+        <p>It seems you haven't uploaded any file yet, you can do it from the "Upload" Tab.</p>
+    </div>
+    <div class="message" *ngIf="!filteredFiles.length">
+        <p>File not found</p>
+    </div>
+
+    <app-modal [isModalOpen]="isModalOpen" 
+   (closeModal)="closeModal()" (sendEmail)="onEmailSent($event)"></app-modal>
+
+</div>

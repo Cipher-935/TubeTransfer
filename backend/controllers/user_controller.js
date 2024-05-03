@@ -5,25 +5,27 @@ const jwt = require("jsonwebtoken");
 
 const { sendEmail } = require("../services/emailService");
 
-const user_sign_in = async (req, res) => {
-  const { name, email, password } = req.body;
-  let existingUser = await Users.findOne({ email });
-  if(existingUser){
-    return next(new error_h(`User with this id exists`, 400));
-  }
-  else{
+const user_sign_in = async (req, res, next) => {
+    const { name, email, password } = req.body;
+    let existingUser = await Users.findOne({ email });
+    if(existingUser){
+        return next(new error_h(`User with this id exists`, 400));
+    }
+    else{
 
-    try{
-      const hashedPassword = await bcrypt.hash(password, 8);
-      const added_user = await Users.create({name: name, email: email, password: hashedPassword})
-      res.status(200).json({
-        resp: "Successfully registered"
-      });
+        try{
+            const hashedPassword = await bcrypt.hash(password, 8);
+            console.log({name: name, email: email, password: hashedPassword});
+            const added_user = await Users.create({name: name, email: email, password: hashedPassword});
+            console.log(added_user);
+            res.status(200).json({
+                resp: "Successfully registered"
+            });
+        }
+        catch(e){
+            return next(new error_h(`Error registering the user` + e, 500));
+        }
     }
-    catch(e){
-        return next(new error_h(`Error registering the user`, 500));
-    }
-  }
 };
 
 const user_login = async (req, res, next) => {
@@ -33,17 +35,17 @@ const user_login = async (req, res, next) => {
       return next(new error_h("Email is incorrect", 500));
     }
     else{
-      const isMatch = await bcrypt.compare(password, user.password);
-      if(isMatch){
-          const pay = {u_id: user._id};
-          const token = jwt.sign(pay, process.env.sessionKey, {expiresIn: "10m"});
-          res.cookie("uid", token, {maxAge: 600000});
-          console.log(res);
-          res.status(200).json({
-             resp: "Successfully logged in"
-          });
-      }
-      else{
+        const isMatch = await bcrypt.compare(password, user.password);
+        if(isMatch){
+            const pay = {u_id: user._id};
+            const token = jwt.sign(pay, process.env.sessionKey, {expiresIn: "40m"});
+            res.cookie("uid", token, {maxAge: 2400000});
+            console.log(res);
+            res.status(200).json({
+                resp: "Successfully logged in"
+            });
+        }
+        else{
           return next(new error_h("Some error making the session", 500));
         }
     }

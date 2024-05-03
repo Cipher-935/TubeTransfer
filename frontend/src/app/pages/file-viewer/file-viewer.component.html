@@ -1,41 +1,35 @@
 <div class="container">
-    <div class="video">
-        <iframe width="560" height="315" src="https://www.youtube.com/embed/vzdNOK2oB2E?si=HMVXAYAcyNOwRoSn" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    <div class="go-back-container">
+        <div class="go-back-button" (click)="goBack()">
+            <p>Go back</p>
+        </div>
+    </div>
+    <div class="frame">
+        <h2>Preview:</h2>
+        <iframe [src]="src" frameborder="0" width="100%" height="auto"></iframe>
     </div>
     <div class="info">
-        <h1 class="title">Name of file</h1>
-        <div class="">
+        <h1 class="title">{{fileName}}</h1>
+        <div class="info-and-buttons">
             <div class="more-info">
-                <span>Category: DSA</span>
-                <span>Date: 2024-04-30</span>
-                <span>Size: 50MB</span>
-                <span>Author: Username</span>
+                <span>Category: {{fileCategory}}</span>
+                <span>Date: {{fileDate}}</span>
+                <span>Size: {{fileSize}}MB</span>
+                <span>Author: {{fileOwner}}</span>
             </div>
             <div class="buttons">
-                <button>SHARE</button>
-                <button>DOWNLOAD</button>
-                <button>DELETE</button>
+                <button (click)="downloadFile()">
+                    <img src="../../../assets/images/icons/download.png" >
+                    <p>Download</p>
+                </button>
             </div>
         </div>
-        <div class="description {{ descIsOpened ? 'opened' : '' }}" (click)="OpenDescription()">
+        <div class="description {{ descIsOpened ? 'opened' : '' }}" (click)="openDescription()">
             <p>
-                Description...
-            <br/>
-            <br/>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus cursus, purus a rutrum sagittis, 
-                lorem justo facilisis ante, vel sagittis ipsum leo vitae neque. Phasellus elit arcu, pulvinar non blandit id, 
-                semper nec tellus. Cras ac leo elementum, pulvinar purus id, mollis purus. Nullam aliquam erat et pellentesque 
-                consequat. Phasellus interdum iaculis ex, at tincidunt sapien imperdiet sit amet. Phasellus dictum nulla vitae 
-                ipsum placerat, sit amet lacinia augue laoreet. Nullam dictum volutpat augue ut varius. Etiam quis eleifend justo, 
-                sit amet laoreet tortor. Donec luctus luctus orci ac ullamcorper. Nunc ultricies, leo at aliquet pellentesque, 
-                nunc sapien pellentesque lacus, at gravida enim elit vel erat. Sed interdum feugiat justo vitae sodales. Morbi 
-                vestibulum congue tortor, a auctor nulla imperdiet venenatis. Fusce lorem leo, molestie vel interdum egestas, rhoncus vel dui.
-                <br/>
-                <br/>
-                Idea: There should be max characters when the user is writing the description on the file upload page.
+                {{fileDesc}}
             </p>
         </div>
-        <div *ngIf="descIsOpened" class="show-less-link" (click)="CloseDescription()">
+        <div *ngIf="descIsOpened" class="show-less-link" (click)="closeDescription()">
             <a>show less</a>
         </div>
     </div>

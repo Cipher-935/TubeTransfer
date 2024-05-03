@@ -1,0 +1,80 @@
+.modal-overlay 
+{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal 
+{
+    background-color: #fff;
+    border-radius: 5px;
+    padding: 20px;
+    width: 600px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+h2 
+{
+    margin-top: 0;
+}
+
+label 
+{
+    display: block;
+    margin-bottom: 5px;
+}
+
+input[type="email"],
+input[type="number"] 
+{
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+input[type="email"]:focus,
+input[type="number"]:focus 
+{
+    outline: none;
+    border-color: #004b23;
+}
+
+.modal button 
+{
+    background-color: #004b23;
+    color: #fff; 
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 15px; 
+}
+
+.modal .send-button:hover 
+{
+    background-color: #003117;
+}
+
+
+.modal .cancel-button:hover
+{
+    background-color: #840000;
+}
+
+.button-container
+{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+}

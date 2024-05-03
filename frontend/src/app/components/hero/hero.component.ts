@@ -1,6 +1,5 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
-import { CommunicationService } from '../../services/communication.service';
-import { RouterModule } from '@angular/router';
+import { Component } from '@angular/core';
+import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -12,5 +11,10 @@ import { CommonModule } from '@angular/common';
 })
 export class HeroComponent 
 {
-    constructor(private communicationService: CommunicationService) { }
+    constructor(private router: Router) { }
+
+    navigateToUpload() 
+    {
+        this.router.navigate(['/menu'], { queryParams: { component: 'upload' } });
+    }
 }

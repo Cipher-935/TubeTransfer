@@ -175,25 +175,25 @@ export class DashboardComponent {
         }
     }
 
-    deleteFile = async (fileKey: string) =>
+    deleteFile = async (fileName: string) =>
     {
-             const obj = {main_key: fileKey};
-             const del_command = await fetch("http://127.0.0.1:4000/delete", {
-                      method: "POST",
-                      credentials: 'include',
-                      headers: {"Content-Type": "application/json"}, 
-                      body: JSON.stringify(obj)
-             });
-             if(del_command.status === 200)
-            {
-                const message = await del_command.json();
-                console.log(message.resp);
-                //location.reload();
-             }
-             else
-             {
-                alert("Error while deleting file");
-             }
+        const obj = {main_key: fileName};
+        const del_command = await fetch("http://127.0.0.1:4000/delete", {
+                method: "POST",
+                credentials: 'include',
+                headers: {"Content-Type": "application/json"}, 
+                body: JSON.stringify(obj)
+        });
+        if(del_command.status === 200)
+        {
+            const message = await del_command.json();
+            console.log(message.resp);
+            location.reload();
+        }
+        else
+        {
+            alert("Error while deleting file");
+        }
     }
 
     viewFile(file: string) 

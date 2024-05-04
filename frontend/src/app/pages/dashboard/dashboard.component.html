@@ -39,7 +39,7 @@
             <button class="icon-button" (click)="downloadFile(file, file.uploaded_file_storage_location)" (mousemove)="updateTooltipPosition($event, 'Download')" (mouseleave)="removeToolTip()">
                 <img src="../../../assets/images/icons/download.png" alt="Download icon">
             </button>
-            <button class="icon-button" (click)="deleteFile(file.uploaded_file_storage_location)" (mousemove)="updateTooltipPosition($event, 'Delete')" (mouseleave)="removeToolTip()">
+            <button class="icon-button" (click)="deleteFile(file.uploded_file_name)" (mousemove)="updateTooltipPosition($event, 'Delete')" (mouseleave)="removeToolTip()">
                 <img src="../../../assets/images/icons/trash.png" alt="Delete icon">
             </button>
             <button class="icon-button" (click)="shareFile(file.uploaded_file_storage_location)" (mousemove)="updateTooltipPosition($event, 'Share')" (mouseleave)="removeToolTip()">

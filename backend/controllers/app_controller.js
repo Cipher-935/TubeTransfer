@@ -120,12 +120,18 @@ exports.delete_object = async (req,res,next) => {
         catch(e){
             return next(new error_h(`Could not delete: ${e}`, 500));
         }
-    }
+}
 
 
 exports.dash_data = async (req,res, next) => {
     try{
-        const all_files = await file_model.find({uploaded_file_owner: res.locals.uid}).select({_id:0 ,uploded_file_name:1, uploaded_file_description:1, uploaded_file_date:1, uploaded_file_category:1, uploaded_file_size:1});
+        const all_files = await file_model.find({uploaded_file_owner: res.locals.uid}).select({
+            _id:0 ,uploded_file_name:1, 
+            uploaded_file_description:1, 
+            uploaded_file_date:1, 
+            uploaded_file_category:1, 
+            uploaded_file_size:1,
+            uploaded_file_storage_location: 1});
         const user_name = await user_model.findById(res.locals.uid);
         const f_name = user_name.name;
         res.status(200).json({

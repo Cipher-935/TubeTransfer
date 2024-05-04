@@ -86,11 +86,11 @@ export class FileViewerComponent
         const rec_link = await fetch("http://127.0.0.1:4000/download",
         {
             method: 'POST',
+            credentials: 'include',
             headers:
             {
                 'Content-Type': 'application/json'
             },
-            credentials: 'include',
             body: JSON.stringify(object)
         });
         if(rec_link.status === 200)
@@ -128,21 +128,16 @@ export class FileViewerComponent
     }
 
     downloadFile = async () => 
-    {
-        const object = 
-        {
-            get_key: this.file.uploaded_file_storage_location
-        };
-        
+    {   
         const rec_link = await fetch("http://127.0.0.1:4000/download", 
         {
             method: 'POST',
+            credentials: 'include',
             headers:
             {
                 'Content-Type': 'application/json'
             },
-            credentials: 'include',
-            body: JSON.stringify(object)
+            body: JSON.stringify({get_key: this.file.uploaded_file_storage_location})
         });
         
         if (rec_link.status === 200) 

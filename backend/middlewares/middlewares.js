@@ -23,6 +23,9 @@ const path_builder = function(file_name, id){
 
 exports.save_file_data = async (req,res,next) => {
     const {file_name, file_size, file_description, file_mime, file_category} = req.body;
+    if(file_description.length > 100 || file_category.length > 50){
+        return next(new error_h("Description and category too large", 500));
+    }
     const storage_path = path_builder(file_name, res.locals.uid);
     try{
         if(file_category.trim() === ''){
@@ -69,6 +72,27 @@ exports.check_cookie = async (req,res,next) => {
         }
     }
 }
+exports.sanitize_signup = async (req,res,next) => {
+    const {name, email, password} = req.body;
+    const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,12}$/;
+    if((name.trim() === '' || name.length > 12) || email.trim() === '' || !regex.test(password.trim())){
+        return next(new error_h("Invalid or empty fields", 400));
+    }
+    else{
+        next();
+    }
+}
+
+exports.sanitize_login = async (req,res,next) => {
+    const {email, password} = req.body;
+    if((password.trim() === '' || password.length > 12) || email.trim() === ''){
+        return next(new error_h("Invalid or empty fields", 400));
+    }
+    else{
+        next();
+    }
+}
+
 
 exports.sanitize_inputs = async(req,res,next) => {
     const {file_name, file_size, file_description, file_mime} = req.body;

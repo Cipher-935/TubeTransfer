@@ -6,6 +6,8 @@
     height: 100px;
     background-color: #004b23;
     padding: 0px 10%;
+    position: relative;
+    z-index: 100;
 }
 
 .logo-container a

@@ -13,15 +13,25 @@ body
     padding: 20px;
 }
 
-.video 
+.frame h2
+{
+    font-weight: 300;
+}
+
+.frame 
 {
     flex: 1;
 }
 
-.video iframe 
+.frame iframe 
 {
     width: 100%;
     height: 720px;
+}
+
+.frame iframe
+{
+    object-fit: fill;
 }
 
 .info 
@@ -62,12 +72,7 @@ body
     cursor: auto;
 }
 
-.metadata 
-{
-    margin-top: 20px;
-}
-
-.metadata span 
+.more-info span
 {
     margin-right: 20px;
     color: #606060;
@@ -84,4 +89,52 @@ body
 .file-viewer-container
 {
     margin-bottom: 200px;
+}
+
+.info-and-buttons
+{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.info-and-buttons button
+{
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    margin-left: 50px;
+    opacity: 50%;
+}
+
+.info-and-buttons button:hover
+{
+    opacity: 100%;
+}
+
+button img
+{
+    width: 30px;
+}
+.go-back-container
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+}
+.go-back-button
+{
+    align-self: flex-end;
+    padding: 5px 20px;
+    margin-bottom: 10px;
+    border: 1px solid black;
+    cursor: pointer;
+    opacity: 80%;
+}
+
+.go-back-button:hover
+{
+    opacity: 100%;
+    background-color: #3b3b3b32;
 }

@@ -110,7 +110,7 @@ exports.sanitize_inputs = async(req,res,next) => {
     {
         return next(new error_h("File type is not supported",400));
     }
-    if((file_size/1024 ** 2) > 50){
+    if((file_size/1024 ** 2) > 100){
         return  next(new error_h("Max file size is 50 mb",400));
     }
     next();

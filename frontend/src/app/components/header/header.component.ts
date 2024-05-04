@@ -16,36 +16,29 @@ export class HeaderComponent
 
     ngOnInit()
     {
-        const token = localStorage.getItem('auth-token');
-
-        console.log("token", token);
-
-        if (token)
-        {
-            fetch('http://localhost:4000/user/user_data',
-                {
-                    method: 'GET',
-                    headers:
-                    {
-                        'Authorization': `Beared ${token}`,
-                        'Content-Type': 'application/json'
-                    }
-                }).then(response => response.json())
-                .then(data =>
-                {
-                    if (data.success)
-                    {
-                        this.userName = data.name;
-                        this.isLogin = true;
-                    }
-                    else
-                    {
-                        console.error('Failed to fetch user data: ', data.message)
-                    }
-                }).catch(error => console.error('Error fetching user data: ', error));
-        }
+        this.getUserData();
     }
 
+    getUserData = async () =>
+    {
+        const rec_dat = await fetch("http://127.0.0.1:4000/list",
+        {
+            method: 'GET',
+            credentials: 'include'
+        });
+
+        if(rec_dat.status === 200){
+            const final_data = await rec_dat.json();
+
+            this.isLogin = true;
+            this.userName = final_data.f_name;
+        }
+        else
+        {
+            this.isLogin = false;
+        }
+    }
+    
     logout()
     {
         localStorage.removeItem('auth-token');

@@ -1,39 +1,52 @@
 <div *ngIf="!fileIsSubmitted" class="upload-container" (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)" (drop)="onDropFile($event)">
     <h2>Upload file here!</h2>
     <div class="upload-box">
-        <div *ngIf="isDraggingOver" class="drag-message">
-            Drop it!
-        </div>
-        <div *ngIf="!isDraggingOver" class="drag-message">
-            Drag and Drop your file here
-        </div>
+      <div *ngIf="isDraggingOver" class="drag-message">
+        Drop it!
+      </div>
+      <div *ngIf="!isDraggingOver" class="drag-message">
+        Drag and Drop your file here
+      </div>
     </div>
-</div>
-<div *ngIf="fileIsSubmitted" class="container">
+    <div class="input-file">
+        <label for="fileInput">Or click here: </label>
+        <input name="fileInput" type="file" (change)="onDropFile($event, false)">
+    </div>
+  </div>
+  <div *ngIf="fileIsSubmitted" class="container">
     <div class="form-container">
-        <form class="form">
-            <h2>File details</h2>
-            <div class="form-group">
-                <label for="name">File name:</label>
-                <input type="text" id="name" name="name" [(ngModel)]="fileName">
-            </div>
-            <div class="form-group">
-                <label for="description">Description:</label>
-                <textarea id="description" name="description" #fileDesc></textarea>
-            </div>
-            <div class="form-group">
-                <label for="category">Category:</label>
-                <input type="text" id="category" name="category">
-            </div>
-            <button type="submit" (click)="uploadFile($event, fileDesc.value)">Upload</button>
-        </form>
+      <form class="form">
+        <h2>File details</h2>
+        <div class="form-group">
+          <label for="name">File name:</label>
+          <input type="text" id="name" name="name" [(ngModel)]="fileName" maxlength="100">
+          <span class="character-count"> {{fileName.length}}/100 </span>
+        </div>
+        <div class="form-group">
+          <label for="description">Description:</label>
+          <textarea id="description" name="description" [(ngModel)]="fileDesc" maxlength="1000">{{ fileDesc }}</textarea>
+          <span class="character-count"> {{fileDesc.length}}/1000 </span>
+        </div>
+        <div class="form-group">
+          <label for="category">Category:</label>
+          <input type="text" id="category" name="category" [(ngModel)]="fileCategory" maxlength="50">
+          <span class="character-count"> {{fileCategory.length}}/50 </span>
+        </div>
+        <button type="submit" [disabled]="isNameEmptyOrWhitespace() || isDescriptionEmptyOrWhitespace()"
+            (click)="uploadFile($event, fileDesc)" 
+            (mouseover)="updateTooltipPosition($event)" 
+            (mousemove)="updateTooltipPosition($event)"
+            (mouseleave)="removeToolTip()">Upload</button>
+        <span class="tooltip" #tooltip *ngIf="toolTipVisible && (isNameEmptyOrWhitespace() || isDescriptionEmptyOrWhitespace())">
+            Please fill out the name and description.
+        </span>
+      </form>
     </div>
     <div class="preview">
-        <h2>Preview</h2>
-        <div class="preview-content">
-            <iframe [src]="src" frameborder="0" width="100%" height="auto"></iframe>
-        </div>
+      <h2>Preview</h2>
+      <div class="preview-content">
+        <iframe [src]="src" frameborder="0" width="100%" height="auto"></iframe>
+      </div>
     </div>
-</div>
-
-<!-- <app-video-player></app-video-player> -->
+  </div>
+  

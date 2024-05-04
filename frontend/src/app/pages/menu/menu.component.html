@@ -1,0 +1,6 @@
+<app-side-bar></app-side-bar>
+
+<div [ngSwitch]="selectedComponent">
+    <app-dashboard *ngSwitchCase="'dashboard'"></app-dashboard>
+    <app-forms *ngSwitchCase="'upload'"></app-forms>
+</div>

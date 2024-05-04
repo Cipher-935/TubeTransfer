@@ -75,7 +75,9 @@ exports.get_object = async (req,res,next) => {
         Key: get_key
     };
     const command = new GetObjectCommand(param);
-    const url = await getSignedUrl(s3, command, {expiresIn: 60*5, signingDate: new Date()});
+  
+    const url = await getSignedUrl(s3, command, {expiresIn: 60*1, signingDate: new Date()});
+  
     if(url){
         res.status(200).json({
             resp: url

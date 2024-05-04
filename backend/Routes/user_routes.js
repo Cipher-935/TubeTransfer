@@ -11,7 +11,7 @@ router.route("/signup").post(mid.sanitize_signup, user_controller.user_sign_in);
 router.route("/login").post(mid.sanitize_login, user_controller.user_login);
 
 
-router.route("/user_data").get(user_controller.get_user_data);
+//router.route("/user_data").get(user_controller.get_user_data);
 
 router.post("/send_recovery_email", user_controller.send_recovery_email);
 

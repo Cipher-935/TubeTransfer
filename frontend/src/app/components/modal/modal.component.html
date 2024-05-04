@@ -1,0 +1,13 @@
+<div *ngIf="isModalOpen" class="modal-overlay">
+    <div class="modal">
+        <h2>Email Modal</h2>
+        <label for="email_input">Enter the email id of the person you want to send to:</label>
+        <input type="email" id="email_input" [(ngModel)]="recieverEmail">
+        <label for="validity">Enter for how long you want the link to be active in minutes</label>
+        <input type="number" id="validity" [(ngModel)]="validityTime">
+        <div class="button-container">
+            <button class="send-button" (click)="onSendClick()">Send</button>
+            <button class="cancel-button" (click)="closeTheModal()">Cancel</button>
+        </div>
+    </div>
+</div>

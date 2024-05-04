@@ -13,6 +13,8 @@ const app_route_handler = require("./Routes/app_routes.js");
 const user_route_handler = require("./Routes/user_routes.js");
 const error_handler = require("./middlewares/Error/error_handler.js");
 const cookie_p = require("cookie-parser");
+//const helmet = require("helmet");
+
 const rate_limiter = require("express-rate-limit"); // Rate limiting per IP
 const l_obj = rate_limiter.rateLimit({
     windowMs: 3 * 60 * 100,
@@ -32,6 +34,34 @@ app.use(cookie_p());
 app.use("/", app_route_handler); // using the route handler to server multiple routes
 app.use("/", user_route_handler);
 
+//app.use(helmet());
+app.use(bodyParser.urlencoded({ extended: false })); // For handling the url encoded body data often in file uploads
+app.use(express.json()); // Middleware to exchange data in json format
+
+// app.all('/*', (req, res, next) =>
+// {
+//     res.setHeader('Access-Control-Allow-Origin', '*');
+//   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+//   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization', 'Content-Length, X-Requested-With');
+
+//   // Allow credentials (cookies, authorization headers) to be sent cross-origin
+//   res.setHeader('Access-Control-Allow-Credentials', 'true');
+// });
+
+app.use(cors({ origin: 'http://127.0.0.1:4200', credentials: true })); // For cross origin request handling
+
+
+
+app.use('/templates', express.static(path.join(__dirname, 'templates')));// Serve static files from the 'templates' directory
+
+app.use(cookie_p());
+// Serve static files from the 'templates' directory
+app.use('/templates', express.static(path.join(__dirname, 'templates'))); // For serving files that are static
+app.use("/", app_route_handler); // using the route handler to server multiple routes
+app.use("/", user_route_handler);
+
+
+// Unhandled routes go here
 app.get("*", (req,res) => {
     res.status(200).json({
         resp: 'Not supported'

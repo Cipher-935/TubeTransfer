@@ -1,0 +1,31 @@
+<div class="sidebar" [ngClass]="{ 'collapsed': isCollapsed }">
+    <div class="toggle-btn" (click)="toggleSidebar()">
+        <img [class.arrow]="!isArrowFlipped" [class.flipped]="isArrowFlipped" src="../../../assets/images/icons/next.png" alt="Delete icon">
+    </div>
+    <div class="sidebar-content">
+        <div class="tab-button" (click)="navigateToDashboard()">
+            <p>Dashboard</p>
+        </div>
+        <div class="tab-button" (click)="navigateToUpload()">
+            <p>Upload</p>
+        </div>
+        <div class="tab-button">
+            <p>Favourites</p>
+        </div>
+        <div class="tab-button">
+            <p>Profile</p>
+        </div>
+        <div class="tab-button">
+            <p>File Editor</p>
+        </div>
+        <div class="tab-button">
+            <p>File Compressor</p>
+        </div>
+        <div class="tab-button">
+            <p>Settings</p>
+        </div>
+        <div class="tab-button">
+            <p>Feedback</p>
+        </div>
+    </div>
+</div>

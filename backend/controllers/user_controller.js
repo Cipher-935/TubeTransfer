@@ -5,11 +5,22 @@ const jwt = require("jsonwebtoken");
 
 const { sendEmail } = require("../services/emailService");
 
-const user_sign_in = async (req, res, next) => {
-    const { name, email, password } = req.body;
-    let existingUser = await Users.findOne({ email });
-    if(existingUser){
-        return next(new error_h(`User with this id exists`, 400));
+const user_sign_in = async (req, res,next) => {
+
+  const { name, email, password } = req.body;
+
+  let existingUser = await Users.findOne({ email });
+
+  if(existingUser){
+    return next(new error_h(`User with this id exists`, 400));
+  }
+  else{
+    try{
+      const hashedPassword = await bcrypt.hash(password, 8);
+      const added_user = await Users.create({name: name, email: email, password: hashedPassword});
+      res.status(200).json({
+        resp: "Successfully registered"
+      });   
     }
     else{
 
@@ -26,6 +37,7 @@ const user_sign_in = async (req, res, next) => {
             return next(new error_h(`Error registering the user` + e, 500));
         }
     }
+  }
 };
 
 const user_login = async (req, res, next) => {

@@ -3,20 +3,6 @@ const express = require("express");
 const path = require("path");
 const dotenv = require("dotenv");
 dotenv.config({path: "./config.env"});
-const cluster = require("cluster");
-const os = require("node:os");
-const cpu_length = os.availableParallelism();
-
-// if(cluster.isPrimary){
-//     for(let i = 0; i < cpu_length; i++){
-//         cluster.fork();
-//     }
-//     cluster.on("exit", (worker,code,signal) => {
-//         console.log(`Worker ${worker.process.pid} died man`);
-//         cluster.fork();
-//     });
-// }
-// else{
 const app = express();
 const http = require("http");
 const cors = require("cors");
@@ -28,13 +14,26 @@ const user_route_handler = require("./Routes/user_routes.js");
 const error_handler = require("./middlewares/Error/error_handler.js");
 const cookie_p = require("cookie-parser");
 //const helmet = require("helmet");
+
 const rate_limiter = require("express-rate-limit"); // Rate limiting per IP
 const l_obj = rate_limiter.rateLimit({
     windowMs: 3 * 60 * 100,
-    limit: 50,
+    limit: 30,
     message: "<h1>You are locked out due to excessive requests</h1>"
 });
 app.use(l_obj);
+
+app.use(bodyParser.urlencoded({ extended: false })); // For handling the url encoded body data often in file uploads
+app.use(express.json()); // Middleware to exchange data in json format
+
+app.use(cors({ origin: 'http://127.0.0.1:4200', credentials: true })); // For cross origin request handling
+
+app.use('/templates', express.static(path.join(__dirname, 'templates')));// Serve static files from the 'templates' directory
+
+app.use(cookie_p());
+app.use("/", app_route_handler); // using the route handler to server multiple routes
+app.use("/", user_route_handler);
+
 //app.use(helmet());
 app.use(bodyParser.urlencoded({ extended: false })); // For handling the url encoded body data often in file uploads
 app.use(express.json()); // Middleware to exchange data in json format
@@ -63,7 +62,6 @@ app.use("/", user_route_handler);
 
 
 // Unhandled routes go here
-
 app.get("*", (req,res) => {
     res.status(200).json({
         resp: 'Not supported'

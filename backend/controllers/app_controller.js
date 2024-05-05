@@ -5,7 +5,7 @@ const {getSignedUrl} = require("@aws-sdk/s3-request-presigner"); // For generati
 const file_model =  require("../models/file_information_model.js"); // For accessing the file schema
 const error_h = require("../middlewares/Error/error_class.js"); // Importing the custom error class
 const user_model = require("../models/user_model.js");
-const nodemailer = require("nodemailer");
+
 // Make the S3 client globally so all functions can access it so as to be modular
 const s3 = new S3Client({
     credentials:{
@@ -69,15 +69,12 @@ exports.get_dash = async (req, res, next) => {
 
 // This functon returns a presigned url to access a private file on the s3.
 exports.get_object = async (req,res,next) => {
-    const {get_key} = req.body;
     const param = {
         Bucket: process.env.bucket_name,
-        Key: get_key
+        Key: res.locals.d_path
     };
     const command = new GetObjectCommand(param);
-  
-    const url = await getSignedUrl(s3, command, {expiresIn: 60*1, signingDate: new Date()});
-  
+    const url = await getSignedUrl(s3, command, {expiresIn: 60*5, signingDate: new Date()});
     if(url){
         res.status(200).json({
             resp: url
@@ -87,6 +84,16 @@ exports.get_object = async (req,res,next) => {
       return next(new error_h("Couldn't get the file at the moment, check the name again", 500));
     } 
 }
+
+
+exports.logout = async (req,res,next) => {
+        res.clearCookie('uid');
+        res.status(200).json({
+            resp: "Logged out"
+        });
+}
+
+
 exports.get_object_timebound = async (req,res,next) => {
     const {get_key, v_time} = req.body;
     const param = {
@@ -120,18 +127,12 @@ exports.delete_object = async (req,res,next) => {
         catch(e){
             return next(new error_h(`Could not delete: ${e}`, 500));
         }
-}
+    }
 
 
 exports.dash_data = async (req,res, next) => {
     try{
-        const all_files = await file_model.find({uploaded_file_owner: res.locals.uid}).select({
-            _id:0 ,uploded_file_name:1, 
-            uploaded_file_description:1, 
-            uploaded_file_date:1, 
-            uploaded_file_category:1, 
-            uploaded_file_size:1,
-            uploaded_file_storage_location: 1});
+        const all_files = await file_model.find({uploaded_file_owner: res.locals.uid}).select({_id:0 ,uploded_file_name:1, uploaded_file_description:1, uploaded_file_date:1, uploaded_file_category:1, uploaded_file_size:1});
         const user_name = await user_model.findById(res.locals.uid);
         const f_name = user_name.name;
         res.status(200).json({
@@ -160,33 +161,4 @@ exports.put_object_url = async (req,res,next) => {
     }
 }
 
-exports.share_mail = async (req, res) => {
-    const {v_time, r_id} = req.body;
-    var transporter = nodemailer.createTransport({
-        service: 'Gmail',
-        auth: {
-            user: 'jay.d.mistry03@gmail.com',
-            pass: 'lpvzebfutulkbwje'
-        }
-    });
-
-    var mailOptions = {
-        from: 'jay.d.mistry03@gmail.com',
-        to: r_id,
-        subject: 'Shared files',
-        text: `TubeTransfer user shared you a file, link: ${res.locals.surl} . This is ony valid for ${v_time} minutes`
-    };
-
-    transporter.sendMail(mailOptions, function (error, info) {
-        if (error) {
-            res.status(404).json({
-                resp: "Your email was not sent"
-            });
-        } else {
-            res.status(200).json({
-                resp: "Your email was sent"
-            });
-        }
-    });
-};
 

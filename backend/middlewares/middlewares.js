@@ -18,6 +18,7 @@ const path_builder = function(file_name, id){
     else{
         loc += `${id}/other/${file_name}`;
     }
+    console.log(`Converted String: ${loc}`);
     return loc.toString();
 }
 
@@ -54,6 +55,14 @@ exports.delete_file_data = async (req,res,next) => {
     catch(e){
         return next(new error_h(`Error: ${e}`, 500));
     }
+}
+
+exports.get_path = async (req,res, next) => {
+    const {get_key} = req.body;
+    console.log(get_key);
+    const g_path = path_builder(get_key, res.locals.uid);
+    res.locals.d_path = g_path;
+    next();
 }
 
 exports.check_cookie = async (req,res,next) => {
@@ -110,7 +119,7 @@ exports.sanitize_inputs = async(req,res,next) => {
     {
         return next(new error_h("File type is not supported",400));
     }
-    if((file_size/1024 ** 2) > 100){
+    if((file_size/1024 ** 2) > 50){
         return  next(new error_h("Max file size is 50 mb",400));
     }
     next();

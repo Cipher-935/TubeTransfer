@@ -18,7 +18,6 @@ const path_builder = function(file_name, id){
     else{
         loc += `${id}/other/${file_name}`;
     }
-    console.log(`Converted String: ${loc}`);
     return loc.toString();
 }
 
@@ -59,7 +58,6 @@ exports.delete_file_data = async (req,res,next) => {
 
 exports.get_path = async (req,res, next) => {
     const {get_key} = req.body;
-    console.log(get_key);
     const g_path = path_builder(get_key, res.locals.uid);
     res.locals.d_path = g_path;
     next();

@@ -79,10 +79,6 @@ export class FileViewerComponent
 
     displayFileContent = async () =>
     {
-        const object = 
-        {
-            get_key: this.file.uploaded_file_storage_location
-        };
         const rec_link = await fetch("http://127.0.0.1:4000/download",
         {
             method: 'POST',
@@ -91,7 +87,7 @@ export class FileViewerComponent
             {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(object)
+            body: JSON.stringify({get_key: this.file.uploded_file_name})
         });
         if(rec_link.status === 200)
         {

@@ -74,7 +74,10 @@ exports.get_object = async (req,res,next) => {
         Key: res.locals.d_path
     };
     const command = new GetObjectCommand(param);
-    const url = await getSignedUrl(s3, command, {expiresIn: 60*5, signingDate: new Date()});
+    const currentTimeUtc = new Date(); // get the current utc time format
+    const expirationTimeUtc = new Date(currentTimeUtc.getTime() + 300);
+    const url = await getSignedUrl(s3, command, {expiresIn: 300, signingDate: expirationTimeUtc});
+    console.log(url);
     if(url){
         res.status(200).json({
             resp: url
@@ -101,7 +104,9 @@ exports.get_object_timebound = async (req,res,next) => {
         Key: get_key
     };
     const command = new GetObjectCommand(param);
-    const url = await getSignedUrl(s3, command, {expiresIn: 60*v_time, signingDate: new Date()});
+    const curr_utc = new Date();
+    const ex_cal_time = new Date(curr_utc.getTime() + v_time*60)
+    const url = await getSignedUrl(s3, command, {expiresIn: 60*v_time, signingDate: ex_cal_time});
     if(url){
        res.locals.surl = url;
        next()

@@ -1,0 +1,51 @@
+.message-box 
+{
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 300px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-top: none;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+    z-index: 100;
+    opacity: 0;
+    transform: translateY(100%);
+}
+
+.message-box.show 
+{
+    opacity: 100%;
+    transform: translateY(0);
+}
+
+.loading-bar 
+{
+    height: 4px;
+    background-color: #004b23;
+}
+
+.content 
+{
+    padding: 10px;
+}
+
+.slide-up 
+{
+    transform: translateY(-100%);
+}
+
+@keyframes slideUp 
+{
+    from 
+    {
+        transform: translateY(100%);
+    }
+
+    to 
+    {
+        transform: translateY(0);
+    }
+}

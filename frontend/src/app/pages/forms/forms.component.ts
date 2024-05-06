@@ -1,5 +1,5 @@
 import { HttpClientModule } from '@angular/common/http';
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { CommunicationService } from '../../services/communication.service';
 import { CommonModule } from '@angular/common';
 import { VideoPlayerComponent } from '../../components/video-player/video-player.component';
@@ -7,6 +7,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { FormsModule, NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
 import { fromEvent, throttleTime } from 'rxjs';
+import { UploadService } from '../../services/shared.service';
 
 // Optional: Define an interface for the data sent to the backend
 interface DeleteObject 
@@ -23,7 +24,8 @@ interface DeleteObject
 })
 export class FormsComponent 
 {
-    constructor(private sanitizer: DomSanitizer, private router: Router) {}
+    constructor(private sanitizer: DomSanitizer, private router: Router,
+        private uploadService: UploadService) {}
 
     isDraggingOver: boolean = false;
     fileIsSubmitted: boolean = false;
@@ -43,6 +45,8 @@ export class FormsComponent
 
     @ViewChild('tooltip') tooltipElement: ElementRef | undefined;
     toolTipVisible: boolean = true;
+
+    @Output() uploadButtonClicked: EventEmitter<void> = new EventEmitter<void>();
 
     updateCharacterCount(fieldName: string) {
         if (fieldName === 'name') 
@@ -198,11 +202,6 @@ export class FormsComponent
         }
     }
 
-    deleteFile = async (event: any, fileName: string) =>
-    {
-    
-    }
-
     enableDeleteButton(value: string) 
     {
         const deleteButton = document.querySelector('#deleteButton');
@@ -240,6 +239,8 @@ export class FormsComponent
 
     uploadFile = async (event: any, fileDesc:string) =>
     {
+        this.uploadService.uploadButtonClicked.emit();
+
         event.preventDefault();
         const mfile = {file_name: this.fileName + this.fileExtensionName, file_mime: this.uploadedFile.type, file_description: fileDesc, file_category: this.fileCategory, file_size: this.fileSize};
 

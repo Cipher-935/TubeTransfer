@@ -1,0 +1,11 @@
+<div (uploadButtonClicked)="startLoading()" class="message-box" [ngClass]="{'show': isVisible}">
+    <div class="loading-bar" [style.width.%]="loadingProgress"></div>
+    <div class="content">
+        <div *ngIf="!uploadedMessage">
+            <p>File is uploading...</p>
+        </div>
+        <div *ngIf="uploadedMessage">
+            <p>File uploaded!</p>
+        </div>
+    </div>
+</div>

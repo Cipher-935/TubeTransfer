@@ -202,22 +202,17 @@ export class DashboardComponent {
         this.router.navigate(['/file-viewer']);
     }
 
-    downloadFile = async (file: any, fileLocation: string) => 
+    downloadFile = async (file: any, fileName: string) => 
     {
-        const object = 
-        {
-            get_key: fileLocation
-        };
-      
         const rec_link = await fetch("http://127.0.0.1:4000/download", 
         {
             method: 'POST',
+            credentials: 'include',
             headers:
             {
                 'Content-Type': 'application/json'
             },
-            credentials: 'include',
-            body: JSON.stringify(object)
+            body: JSON.stringify({get_key: fileName})
         });
       
         if (rec_link.status === 200) 
@@ -235,7 +230,7 @@ export class DashboardComponent {
             const downloadAnchor = document.createElement('a');
             downloadAnchor.href = downloadLink;
             downloadAnchor.download = this.getFilenameFullname(file.uploded_file_name);
-            console.log(downloadAnchor.download);
+            console.log(downloadLink);
             downloadAnchor.target = '_blank';
             downloadAnchor.setAttribute('download', ''); // Force download (apparently experimental, works tho)
         
@@ -254,6 +249,16 @@ export class DashboardComponent {
     {
         const parts = fullname.split('.');
         return parts[0];
+    }
+
+    extractPath(url: string): string {
+        const regex = /\/([a-f0-9-]+)$/i;
+        const match = url.match(regex);
+        if (match) {
+            return match[0];
+        } else {
+            return '';
+        }
     }
 
     shareFile(fileKey: string) 

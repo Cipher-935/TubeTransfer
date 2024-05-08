@@ -39,9 +39,22 @@ export class HeaderComponent
         }
     }
     
-    logout()
+    logout = async () =>
     {
-        localStorage.removeItem('auth-token');
-        window.location.replace("/");
+        const rec_dat = await fetch("http://127.0.0.1:4000/logout",
+        {
+            method: 'GET',
+            credentials: 'include'
+        });
+
+        if(rec_dat.status === 200)
+        {
+
+            window.location.replace("/");
+        }
+        else
+        {
+            console.log(rec_dat);
+        }
     }
 }

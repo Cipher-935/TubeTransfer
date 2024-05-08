@@ -66,3 +66,27 @@
 {
     background-color: #eef0e520;
 }
+
+@media screen and (max-width: 800px) 
+{
+    .logo-container a
+    {
+        font-size: 20px;
+    }
+
+    .header-container p
+    {
+        display: none;
+    }
+
+    .logout-button
+    {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .logout-button h3
+    {
+        font-size: 15px;
+    }
+}

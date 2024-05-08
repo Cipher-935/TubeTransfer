@@ -78,6 +78,7 @@ export class MessageBoxComponent {
             {
                 clearInterval(timer);
                 this.toggleVisibility();
+                this.loadingProgress = 0;
             }
             else
             {

@@ -59,6 +59,13 @@ h2
     font-size: 50px;
 }
 
+.container 
+{
+    display: flex;
+    flex-wrap: wrap;
+    height: 1000px;
+}
+
 .upload-details 
 {
     margin-top: 20px;
@@ -81,12 +88,6 @@ h2
 {
     cursor: pointer;
     margin: 20px 10px;
-}
-
-.container 
-{
-    display: flex;
-    height: 1000px;
 }
 
 .form 
@@ -206,4 +207,38 @@ button[type="submit"] :hover
     font-size: 12px;
     color: #aaa;
     float: right;
+}
+
+@media screen and (max-width: 800px) 
+{
+    .upload-box
+    {
+        display: none;
+    }
+
+    .input-file label
+    {
+        display: none;
+    }
+
+    .container
+    {
+        flex-direction: column;
+        margin: 20px 10px;
+    }
+
+    .preview 
+    {
+        display: none;
+    }
+
+    .input-file input
+    {
+        margin-left: 80px;
+    }
+
+    .tooltip
+    {
+        display: none;
+    }
 }

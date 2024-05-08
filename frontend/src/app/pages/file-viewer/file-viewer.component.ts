@@ -104,7 +104,8 @@ export class FileViewerComponent
     readFIleContent(file: any)
     {
         const reader = new FileReader();
-        reader.onload = () => {
+        reader.onload = () => 
+        {
             const dataUrl = reader.result as string; // Assuming fileContent is a base64-encoded string
             console.log(dataUrl);
 
@@ -120,7 +121,7 @@ export class FileViewerComponent
 
     getFileSize(fileSize: number)
     {
-        this.fileSize = fileSize/ 100000;
+        this.fileSize = fileSize / 100000;
     }
 
     downloadFile = async () => 

@@ -25,7 +25,8 @@ interface DeleteObject
 export class FormsComponent 
 {
     constructor(private sanitizer: DomSanitizer, private router: Router,
-        private uploadService: UploadService) {}
+    
+    private uploadService: UploadService) {}
 
     isDraggingOver: boolean = false;
     fileIsSubmitted: boolean = false;
@@ -48,18 +49,21 @@ export class FormsComponent
 
     @Output() uploadButtonClicked: EventEmitter<void> = new EventEmitter<void>();
 
-    updateCharacterCount(fieldName: string) {
+    hasButtonBeenClicked: boolean = false;
+
+    updateCharacterCount(fieldName: string) 
+    {
         if (fieldName === 'name') 
         {
-            this.fileName = this.fileName.slice(0, 100); // Limit characters to 100
+            this.fileName = this.fileName.slice(0, 30); // Limit characters to 30
         }
         else if (fieldName === 'description') 
         {
-            this.fileDesc = this.fileDesc.slice(0, 1000); // Limit characters to 1000
+            this.fileDesc = this.fileDesc.slice(0, 300); // Limit characters to 300
         } 
         else if (fieldName === 'category') 
         {
-            this.fileCategory = this.fileCategory.slice(0, 50); // Limit characters to 50
+            this.fileCategory = this.fileCategory.slice(0, 20); // Limit characters to 20
         }
     }
 
@@ -207,42 +211,30 @@ export class FormsComponent
         const deleteButton = document.querySelector('#deleteButton');
         if (value) 
         {
-        deleteButton?.removeAttribute('disabled');
+            deleteButton?.removeAttribute('disabled');
         } 
         else 
         {
-        deleteButton?.setAttribute('disabled', 'true');
-        }
-    }
-
-    getLink = async (event:any, fileName: string) =>
-    {
-        event.preventDefault();
-
-        const s_dat = {get_key: fileName};
-        const rec_link = await fetch("http://127.0.0.1:4000/get-presign-link", 
-        {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(s_dat)
-        });
-        if(rec_link.status === 200)
-        {
-            const final_link = await rec_link.json();
-            console.log(final_link);
-        }
-        else if(rec_link.status === 404)
-        {
-            console.log("Error");
+            deleteButton?.setAttribute('disabled', 'true');
         }
     }
 
     uploadFile = async (event: any, fileDesc:string) =>
     {
+        event.preventDefault();
+
+        this.hasButtonBeenClicked = true;
+
         this.uploadService.uploadButtonClicked.emit();
 
-        event.preventDefault();
-        const mfile = {file_name: this.fileName + this.fileExtensionName, file_mime: this.uploadedFile.type, file_description: fileDesc, file_category: this.fileCategory, file_size: this.fileSize};
+        const mfile = 
+        {
+            file_name: this.fileName + this.fileExtensionName, 
+            file_mime: this.uploadedFile.type, 
+            file_description: fileDesc, 
+            file_category: this.fileCategory, 
+            file_size: this.fileSize
+        };
 
         const rec_put_link = await fetch("http://127.0.0.1:4000/upload",{
             method: "POST",
@@ -265,7 +257,6 @@ export class FormsComponent
             
             if(put_req.status === 200)
             {
-                alert("Hey the file was uploaded");
                 this.router.navigate(['/menu']);
             }
             else

@@ -5,33 +5,27 @@
     width: 80%;
     margin: 0 auto;
     border: 1px solid #ddd;
-    padding: 1rem;
     border-radius: 5px;
+    padding: 3px;
     height: 90vh;
 }
 
-.main_frame h2 
-{
-    font-weight: 400;
-}
 
-.main_frame h3 
-{
-    font-weight: 300;
-}
-
-.main_frame h2:hover
+.main_frame h3:hover
 {
     cursor: pointer;
 }
+
+/* .data-item headers{
+    justify-content: space-evenly;
+} */
 
 .data-item 
 {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    /* justify-content: space-between; */
     align-items: center;
-    padding: 0.5rem 1rem;
     border-bottom: 1px solid #ddd;
 }
 
@@ -144,3 +138,56 @@
     font-size: 30px;
     margin-top: 30px;
 }
+
+/* For mobile devices */
+@media only screen and (max-width: 600px) {
+    /* Add your CSS rules for mobile screens here */
+    .file-name-container{
+        width: 350px;
+        max-width: 90px;
+        font-size: 13px;
+
+        word-wrap: break-word;
+    }
+    .file-desc-container{
+        width: 170px;
+        font-size: 13px;
+        text-align: center;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        padding:8px;
+
+    }
+    .file-category-container{
+        width: 100px;
+        font-size: 13px;
+        margin-left: 10px;
+    }
+    .file-date-container{
+        width: 100px;
+        font-size: 13px;
+        text-align: center;
+    }
+    .span-buttons{
+        margin-left: 5px;
+    }
+    .main_frame{
+
+        width: 97vw;
+        padding: 4px;
+
+    }
+
+    /* Adjust other styles as needed */
+  }
+  
+  /* For tablets and small screens */
+  @media only screen and (min-width: 601px) and (max-width: 1024px) {
+    /* Add your CSS rules for tablets and small screens here */
+    body {
+      font-size: 16px;
+    }
+    /* Adjust other styles as needed */
+  }
+  
+  

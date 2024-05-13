@@ -225,8 +225,6 @@ export class FormsComponent
 
         this.hasButtonBeenClicked = true;
 
-        this.uploadService.uploadButtonClicked.emit();
-
         const mfile = 
         {
             file_name: this.fileName + this.fileExtensionName, 
@@ -257,6 +255,7 @@ export class FormsComponent
             
             if(put_req.status === 200)
             {
+                this.uploadService.uploadButtonClicked.emit();
                 this.router.navigate(['/menu']);
             }
             else
@@ -267,7 +266,7 @@ export class FormsComponent
         else
         {
             const j_resp = await rec_put_link.json();
-            alert(j_resp.resp);
+            this.router.navigate(['/login']);
         }
     }
 }

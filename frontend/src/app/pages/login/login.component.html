@@ -23,7 +23,7 @@
                 <button (click)="verifyOTP(inputOTP.value)">Enter</button>
             </div>
         </div>
-        <button type="submit">{{ isLogin ? 'Login' : 'Sign Up' }}</button>
+        <button [disabled]="isOTPView" type="submit">{{ isLogin ? 'Login' : 'Sign Up' }}</button>
       </form>
       <p>{{ isLogin ? 'Don\'t have an account?' : 'Already have an account?' }} <a (click)="toggleForm()">{{ isLogin ? 'Sign up' : 'Login' }}</a></p>
     </div>

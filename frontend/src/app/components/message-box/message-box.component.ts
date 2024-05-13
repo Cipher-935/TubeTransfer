@@ -41,7 +41,7 @@ export class MessageBoxComponent {
     {
         this.uploadedMessage = false;
 
-        this.loadingDuration = 500;
+        this.loadingDuration = 100;
         const interval = 10;
         const steps = this.loadingDuration / interval;
         const stepSize = 100 / steps;

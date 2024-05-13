@@ -45,9 +45,10 @@ export class LoginComponent {
             });
 
             const r_dat = await send_reg.json();
-            alert(r_dat.resp);
 
+            window.location.reload();
             this.router.navigate(['/menu']);
+            
         }
         else
         {
@@ -64,8 +65,6 @@ export class LoginComponent {
         if (localEmail) 
         {
             this.OTP = Math.floor(Math.random() * 9000 + 1000);
-            console.log(this.OTP);
-            console.log(localEmail);
 
             const recieved_response = await fetch('http://127.0.0.1:4000/send_recovery_email', {
                 method: 'POST',
@@ -102,8 +101,6 @@ export class LoginComponent {
 
     signUp = async () => 
     {
-        console.log("Signing up: ", this.formHolder.value);
-
         const recieved_response = await fetch('http://127.0.0.1:4000/signup',
         {
             method: 'POST',
@@ -124,8 +121,7 @@ export class LoginComponent {
         else
         {
             const data = await recieved_response.json();
-
-            console.log(data.resp);
+            alert(data.resp);
         }
     }
 }

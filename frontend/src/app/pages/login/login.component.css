@@ -67,3 +67,16 @@ a:hover
 {
     text-decoration: underline;
 }
+
+.password-crit p
+{
+    text-align: left;
+    font-size: 16px;
+}
+
+.password-crit li
+{
+    font-size: 14px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}

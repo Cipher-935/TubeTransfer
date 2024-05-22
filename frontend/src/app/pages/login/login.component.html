@@ -16,6 +16,14 @@
           <label for="password">Password</label>
           <input type="password" id="password" name="password" ngModel required>
         </div>
+        <div class="password-crit" *ngIf="!isLogin">
+          <p>Password must be:</p>
+          <ul>
+            <li>Between 8 - 12 characters in length</li>
+            <li>Must contain at least one uppercase letter</li>
+            <li>Must contain at least one special character</li>
+          </ul>
+        </div>
         <div *ngIf="isOTPView">
             <div class="form-group">
                 <label for="otp">Enter OTP code here: </label>
@@ -23,7 +31,9 @@
                 <button (click)="verifyOTP(inputOTP.value)">Enter</button>
             </div>
         </div>
-        <button [disabled]="isOTPView" type="submit">{{ isLogin ? 'Login' : 'Sign Up' }}</button>
+        <div *ngIf="!isOTPView">
+          <button [disabled]="isOTPView" type="submit">{{ isLogin ? 'Login' : 'Sign Up' }}</button>
+        </div>
       </form>
       <p>{{ isLogin ? 'Don\'t have an account?' : 'Already have an account?' }} <a (click)="toggleForm()">{{ isLogin ? 'Sign up' : 'Login' }}</a></p>
     </div>

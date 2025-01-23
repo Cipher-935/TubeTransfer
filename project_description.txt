@@ -1,0 +1,1 @@
+This is MEAN stack project to implement a full-stack secure and scalable cloud storage and file sharing service. I used terraform over AWS in order to automat the deployement and testing.
